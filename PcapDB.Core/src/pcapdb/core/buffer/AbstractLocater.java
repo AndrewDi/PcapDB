@@ -1,6 +1,6 @@
 package pcapdb.core.buffer;
 
-public interface AbstractLocater {
+public abstract class AbstractLocater {
 
 
 }
