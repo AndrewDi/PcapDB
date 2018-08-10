@@ -45,16 +45,14 @@ public class PcapHeader extends AbstractPacket{
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder(" {\n");
-        sb.append("iMagic:"+this.getiMagic()+"\n");
-        sb.append("iMaVersion:"+this.getiMaVersion()+"\n");
-        sb.append("iMiVersion:"+this.getiMiVersion()+"\n");
-        sb.append("iTimezone:"+this.getiTimezone()+"\n");
-        sb.append("iSigFlags:"+this.getiSigFlags()+"\n");
-        sb.append("iSnapLen:"+this.getiSnapLen()+"\n");
-        sb.append("iLinkType:"+this.getiLinkType()+"\n");
-        sb.append("}");
-
-        return sb.toString();
+        return "PcapHeader{" +
+                "iMagic="+this.getiMagic() +
+                ", iMaVersion="+this.getiMaVersion() +
+                ", iMiVersion="+this.getiMiVersion() +
+                ", iTimezone="+this.getiTimezone() +
+                ", iSigFlags="+this.getiSigFlags() +
+                ", iSnapLen="+this.getiSnapLen() +
+                ", iLinkType="+this.getiLinkType() +
+                '}';
     }
 }

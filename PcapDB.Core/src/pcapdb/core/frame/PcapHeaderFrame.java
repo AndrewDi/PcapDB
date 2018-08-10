@@ -41,4 +41,23 @@ public class PcapHeaderFrame implements Serializable {
         iLinkTypePosition=iSnapLenPosition+iSnapLenLength;
     }
 
+    @Override
+    public String toString() {
+        return "PcapHeaderFrame{" +
+                "iMagicLength=" + iMagicLength +
+                ", iMaVersionLength=" + iMaVersionLength +
+                ", iMiVersionLength=" + iMiVersionLength +
+                ", iTimezoneLength=" + iTimezoneLength +
+                ", iSigFlagsLength=" + iSigFlagsLength +
+                ", iSnapLenLength=" + iSnapLenLength +
+                ", iLinkTypeLength=" + iLinkTypeLength +
+                ", iMagicPosition=" + iMagicPosition +
+                ", iMaVersionPosition=" + iMaVersionPosition +
+                ", iMiVersionPosition=" + iMiVersionPosition +
+                ", iTimezonePosition=" + iTimezonePosition +
+                ", iSigFlagsPosition=" + iSigFlagsPosition +
+                ", iSnapLenPosition=" + iSnapLenPosition +
+                ", iLinkTypePosition=" + iLinkTypePosition +
+                '}';
+    }
 }

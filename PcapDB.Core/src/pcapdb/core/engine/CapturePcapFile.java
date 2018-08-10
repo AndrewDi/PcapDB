@@ -29,10 +29,4 @@ public class CapturePcapFile {
             return null;
         }
     }
-
-    public static void main(String[] args) {
-        MappedByteBufferLocater mappedByteBufferLocater = CapturePcapFile.OpenFile("/home/andrew/Developer/pcap4j/Dump10");
-        PcapHeader pcapHeader = new PcapHeader(mappedByteBufferLocater);
-        logger.info(pcapHeader.toString());
-    }
 }
