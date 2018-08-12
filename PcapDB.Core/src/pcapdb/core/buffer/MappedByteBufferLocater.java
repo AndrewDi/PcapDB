@@ -17,8 +17,20 @@ public class MappedByteBufferLocater extends AbstractLocater {
         this.mappedByteBuffer.order(ByteOrder.LITTLE_ENDIAN);
     }
 
+    public MappedByteBufferLocater(MappedByteBufferLocater _mappedByteBufferLocater,int _baseoffset){
+        this(_mappedByteBufferLocater.mappedByteBuffer,_baseoffset);
+    }
+
+    public int getBaseOffset() {
+        return baseOffset;
+    }
+
     public void resetBaseOffset(){
         this.baseOffset=0;
+    }
+
+    public boolean hasRemaining(){
+        return this.mappedByteBuffer.capacity()>this.baseOffset;
     }
 
     public int getRemainLength(){
@@ -57,10 +69,6 @@ public class MappedByteBufferLocater extends AbstractLocater {
 
     public char getChar(int _offset){
         return this.mappedByteBuffer.getChar(this.baseOffset+_offset);
-    }
-
-    public MappedByteBufferLocater getPayload(int _startIndex){
-        return new MappedByteBufferLocater(this.mappedByteBuffer,_startIndex);
     }
 
     public long getPhysicOffset(){

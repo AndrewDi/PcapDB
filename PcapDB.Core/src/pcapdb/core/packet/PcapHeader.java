@@ -15,6 +15,11 @@ public class PcapHeader extends AbstractPacket{
         super(_mappedByteBufferLocater);
     }
 
+    @Override
+    public MappedByteBufferLocater getPayload() {
+        return new MappedByteBufferLocater(this.mappedByteBufferLocater,this.mappedByteBufferLocater.getBaseOffset()+PcapHeaderFrame.totalLength);
+    }
+
     public String getiMagic() {
         return this.mappedByteBufferLocater.getByteString(PcapHeaderFrame.iMagicPosition,PcapHeaderFrame.iMagicLength);
     }
@@ -39,12 +44,13 @@ public class PcapHeader extends AbstractPacket{
         return this.mappedByteBufferLocater.getInt(PcapHeaderFrame.iSnapLenPosition);
     }
 
-    public int getiLinkType(){
-        return this.mappedByteBufferLocater.getInt(PcapHeaderFrame.iLinkTypePosition);
+    public LinkType getiLinkType(){
+        return LinkType.valueOf(this.mappedByteBufferLocater.getInt(PcapHeaderFrame.iLinkTypePosition));
     }
 
     @Override
     public String toString() {
+        logger.debug(new PcapHeaderFrame().toString());
         return "PcapHeader{" +
                 "iMagic="+this.getiMagic() +
                 ", iMaVersion="+this.getiMaVersion() +

@@ -32,6 +32,8 @@ public class PcapHeaderFrame implements Serializable {
 
     public static int iLinkTypePosition;
 
+    public static int totalLength;
+
     static {
         iMaVersionPosition=iMagicPosition+iMagicLength;
         iMiVersionPosition=iMaVersionPosition+iMaVersionLength;
@@ -39,6 +41,7 @@ public class PcapHeaderFrame implements Serializable {
         iSigFlagsPosition=iTimezonePosition+iTimezoneLength;
         iSnapLenPosition=iSigFlagsPosition+iSigFlagsLength;
         iLinkTypePosition=iSnapLenPosition+iSnapLenLength;
+        totalLength=iLinkTypePosition+iLinkTypeLength;
     }
 
     @Override
