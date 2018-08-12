@@ -7,6 +7,7 @@ import pcapdb.core.frame.LinkType;
 import pcapdb.core.frame.PcapHeaderFrame;
 
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 
 public class PcapHeader extends AbstractPacket{
     protected final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
@@ -21,7 +22,7 @@ public class PcapHeader extends AbstractPacket{
     }
 
     public String getiMagic() {
-        return this.mappedByteBufferLocater.getByteString(PcapHeaderFrame.iMagicPosition,PcapHeaderFrame.iMagicLength);
+        return this.mappedByteBufferLocater.getByteString(PcapHeaderFrame.iMagicPosition,PcapHeaderFrame.iMagicLength, ByteOrder.BIG_ENDIAN);
     }
 
     public short getiMaVersion(){

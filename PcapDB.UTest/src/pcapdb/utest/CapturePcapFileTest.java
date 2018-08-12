@@ -17,10 +17,13 @@ public class CapturePcapFileTest {
     public static void main(String[] args) {
         MappedByteBufferLocater mappedByteBufferLocater = CapturePcapFile.OpenFile("PcapDB.UTest/Pcaps/drda_db2_sample.cap");
         AbstractPacket pcapHeader = new PcapHeader(mappedByteBufferLocater);
+        logger.info(pcapHeader.toString());
         MappedByteBufferLocater payload = pcapHeader.getPayload();
         while (payload.hasRemaining()){
             Packet packet = new Packet(payload);
+
             logger.info(packet.toString());
+            packet.Decoder();
             payload=packet.getNextPacket();
         }
     }

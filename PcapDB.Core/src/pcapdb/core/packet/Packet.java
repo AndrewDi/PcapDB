@@ -6,6 +6,7 @@ import pcapdb.core.buffer.MappedByteBufferLocater;
 import pcapdb.core.frame.PacketFrame;
 import pcapdb.core.frame.PcapHeaderFrame;
 
+import java.nio.ByteOrder;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Date;
@@ -47,6 +48,23 @@ public class Packet extends AbstractPacket {
         //Every packet has 16 bytes
         int nextIndex = this.mappedByteBufferLocater.getBaseOffset()+this.getCapLen()+16;
         return new MappedByteBufferLocater(this.mappedByteBufferLocater,nextIndex);
+    }
+
+    public AbstractPacket Decoder(){
+
+        //Only support Ethernet Packet
+        EthernetPacket ethernetPacket = new EthernetPacket(this.getPayload(),this);
+        logger.debug(ethernetPacket.toString());
+        switch (ethernetPacket.getType()){
+            case "0800":
+                Ipv4Packet ipv4Packet = new Ipv4Packet(ethernetPacket.getPayload(),ethernetPacket);
+                logger.debug(ipv4Packet.toString());
+                return ipv4Packet.Decoder();
+            case "86DD":
+                //Ipv6 Packet
+            default:
+                return null;
+        }
     }
 
     @Override

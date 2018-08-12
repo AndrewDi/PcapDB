@@ -45,22 +45,48 @@ public class MappedByteBufferLocater extends AbstractLocater {
         return this.mappedByteBuffer.getShort(this.baseOffset+_offset);
     }
 
+    public int getShort(int _offset,ByteOrder byteOrder){
+        if(byteOrder==ByteOrder.BIG_ENDIAN)
+            return getShort(_offset);
+        else{
+            return this.getByte(_offset+1) & 0xFF | (this.getByte(_offset) & 0xFF) <<8;
+        }
+    }
+
+    public int getSingle(int _offset){
+        return this.getByte(_offset) & 0xFF;
+    }
+
     public long getLong(int _offset){
         return this.mappedByteBuffer.getLong(this.baseOffset+_offset);
     }
 
-    public ByteBuffer getByteBuffer(byte[] bytes, int offset,int length){
-        return this.mappedByteBuffer.get(bytes,offset,length);
+    public byte getByte(int offset){
+        return this.mappedByteBuffer.get(this.baseOffset+offset);
     }
 
-    public String getByteString(int offset,int length){
+    public byte[] getBytes(int offset,int length){
+        byte[] bytesData = new byte[length];
+        for (int i = 0; i < length; i++) {
+            bytesData[i] = this.mappedByteBuffer.get(this.baseOffset+offset+i);
+        }
+        return bytesData;
+    }
+
+    public String getByteString(int offset,int length, ByteOrder byteOrder){
         char[] hexArray = "0123456789ABCDEF".toCharArray();
-        byte[] bytes = new byte[length];
-        this.mappedByteBuffer.get(bytes,offset,length);
+        //byte[] bytes = new byte[length];
+        //this.mappedByteBuffer.get(bytes,offset,length);
         char[] hexChars = new char[length * 2];
         for ( int j = 0; j < length; j++ ) {
             //Fix byte order error,maybe there is another way
-            int v = bytes[length-j-1] & 0xFF;
+            int v;
+            if(byteOrder==ByteOrder.BIG_ENDIAN) {
+                v = this.mappedByteBuffer.get(this.baseOffset+offset+(length - j - 1)) & 0xFF;
+            }
+            else{
+                v = this.mappedByteBuffer.get(this.baseOffset+offset+j) & 0xFF;
+            }
             hexChars[j * 2] = hexArray[v >>> 4];
             hexChars[j * 2 + 1] = hexArray[v & 0x0F];
         }

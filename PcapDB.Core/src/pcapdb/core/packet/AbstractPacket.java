@@ -5,10 +5,15 @@ import pcapdb.core.buffer.MappedByteBufferLocater;
 public abstract class AbstractPacket {
     protected MappedByteBufferLocater mappedByteBufferLocater;
 
-    protected AbstractPacket Parent=null;
+    protected AbstractPacket parent =null;
 
     public AbstractPacket getParent() {
-        return Parent;
+        return parent;
+    }
+
+    public AbstractPacket(MappedByteBufferLocater _mappedByteBufferLocater, AbstractPacket _packet){
+        this.mappedByteBufferLocater=_mappedByteBufferLocater;
+        this.parent = _packet;
     }
 
     public AbstractPacket(MappedByteBufferLocater _mappedByteBufferLocater){
