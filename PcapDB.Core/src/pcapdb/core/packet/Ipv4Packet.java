@@ -24,7 +24,16 @@ public class Ipv4Packet extends AbstractPacket {
     }
 
     public AbstractPacket Decoder(){
-        return null;
+        switch (this.getProtocol()){
+            //Decode TCP Protocol
+            case 6:
+                TcpPacket tcpPacket = new TcpPacket(this.getPayload(),this);
+                logger.debug(tcpPacket.toString());
+                return tcpPacket.Decoder();
+
+            default:
+                return null;
+        }
     }
 
     public int getVersion(){

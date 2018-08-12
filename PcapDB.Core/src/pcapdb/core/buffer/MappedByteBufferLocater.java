@@ -37,6 +37,17 @@ public class MappedByteBufferLocater extends AbstractLocater {
         return this.mappedByteBuffer.remaining();
     }
 
+    public int getInt(int _offset,ByteOrder byteOrder){
+        if(byteOrder==ByteOrder.BIG_ENDIAN)
+            return getInt(_offset);
+        else {
+            return this.getByte(_offset+3) & 0xFF |
+                    (this.getByte(_offset+2) & 0xFF )<<8 |
+                    (this.getByte(_offset+1) & 0xFF )<<16 |
+                    (this.getByte(_offset) & 0xFF )<<24;
+        }
+    }
+
     public int getInt(int _offset){
         return this.mappedByteBuffer.getInt(this.baseOffset+_offset);
     }
@@ -103,6 +114,10 @@ public class MappedByteBufferLocater extends AbstractLocater {
 
     public long getUnsignedInt(int _offset){
         return this.getInt(_offset) & 0xFFFFFFFFL;
+    }
+
+    public long getUnsignedInt(int _offset,ByteOrder byteOrder){
+        return this.getInt(_offset,byteOrder) & 0xFFFFFFFFL;
     }
 
     public long unsignedInt(final byte a, final byte b, final byte c, final byte d) {
