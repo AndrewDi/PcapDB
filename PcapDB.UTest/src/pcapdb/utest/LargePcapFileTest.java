@@ -29,6 +29,6 @@ public class LargePcapFileTest {
             payload=packet.getNextPacket();
         }
         LocalDateTime endTime = LocalDateTime.now();
-        logger.debug("Process {} packges in {} seconds",i, Duration.between(startTime,endTime).getSeconds());
+        logger.info("Process {} packges in {} seconds",i, Duration.between(startTime,endTime).getSeconds());
     }
 }

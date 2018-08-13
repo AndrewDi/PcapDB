@@ -8,6 +8,7 @@ public class MappedByteBufferLocater extends AbstractLocater {
     private MappedByteBuffer mappedByteBuffer;
 
     private char[] hexArray = "0123456789ABCDEF".toCharArray();
+    private int length;
 
     private int baseOffset;
 
@@ -21,6 +22,14 @@ public class MappedByteBufferLocater extends AbstractLocater {
 
     public MappedByteBufferLocater(MappedByteBufferLocater _mappedByteBufferLocater,int _baseoffset){
         this(_mappedByteBufferLocater.mappedByteBuffer,_baseoffset);
+    }
+
+    public int getLength() {
+        return length;
+    }
+
+    public void setLength(int length) {
+        this.length = length;
     }
 
     public int getBaseOffset() {

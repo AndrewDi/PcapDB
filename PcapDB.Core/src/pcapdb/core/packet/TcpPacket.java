@@ -10,6 +10,8 @@ import java.nio.ByteOrder;
 public class TcpPacket extends AbstractPacket {
 
     /**
+     *  ref http://www.ietf.org/rfc/rfc793.txt
+     *
      *     0                   1                   2                   3
      *     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
      *    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -133,10 +135,11 @@ public class TcpPacket extends AbstractPacket {
         if(this.getPayloadLength()<drdaLength)
             return null;
         String magic = payloadMappedByteBufferLocater.getByteStrig(2);
+        //0xD0 means this a DRDA packet
         if(magic.equals("D0")){
-            DRDAPacket drdaPacket = new DRDAPacket(payloadMappedByteBufferLocater,this);
-            logger.debug(drdaPacket.toString());
-            return drdaPacket;
+            DrdaPacketList drdaPacketList = new DrdaPacketList(payloadMappedByteBufferLocater,this);
+            logger.debug(drdaPacketList.toString());
+            return drdaPacketList;
         }
         return null;
     }
