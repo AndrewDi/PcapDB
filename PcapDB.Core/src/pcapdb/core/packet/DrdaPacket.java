@@ -40,6 +40,7 @@ public class DrdaPacket extends AbstractPacket {
             int startIndex = offset + DrdaFrame.DDMParameterLengthLength + DrdaFrame.DDMParameterCodePointLength;
             int strlength = length;
             if (drdaCodePointType == DrdaCodePointType.DATA || drdaCodePointType == DrdaCodePointType.QRYDTA) {
+                strlength-=1;
                 drdaDDMParameter.setData(this.mappedByteBufferLocater.getUTF8String(startIndex, strlength).trim());
             }
             else {
