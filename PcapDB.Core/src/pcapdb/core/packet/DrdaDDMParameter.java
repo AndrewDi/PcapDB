@@ -7,7 +7,7 @@ public class DrdaDDMParameter {
 
     private DrdaCodePointType drdaCodePointType;
 
-    private String data;
+    private Object data;
 
     public int getLength() {
         return length;
@@ -25,11 +25,11 @@ public class DrdaDDMParameter {
         this.drdaCodePointType = drdaCodePointType;
     }
 
-    public String getData() {
+    public Object getData() {
         return data;
     }
 
-    public void setData(String data) {
+    public void setData(Object data) {
         this.data = data;
     }
 
