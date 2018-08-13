@@ -9,6 +9,28 @@ import java.nio.ByteOrder;
 
 public class TcpPacket extends AbstractPacket {
 
+    /**
+     *     0                   1                   2                   3
+     *     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+     *    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     *    |          Source Port          |       Destination Port        |
+     *    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     *    |                        Sequence Number                        |
+     *    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     *    |                    Acknowledgment Number                      |
+     *    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     *    |  Data |           |U|A|P|R|S|F|                               |
+     *    | Offset| Reserved  |R|C|S|S|Y|I|            Window             |
+     *    |       |           |G|K|H|T|N|N|                               |
+     *    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     *    |           Checksum            |         Urgent Pointer        |
+     *    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     *    |                    Options                    |    Padding    |
+     *    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     *    |                             data                              |
+     *    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     */
+
     protected final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
     public TcpPacket(MappedByteBufferLocater _mappedByteBufferLocater, AbstractPacket _packet) {
@@ -94,7 +116,7 @@ public class TcpPacket extends AbstractPacket {
     }
 
     public int getHeaderLength(){
-        return this.mappedByteBufferLocater.getByte(TcpFrame.DataOffsetAndFlagsPosition) << 2 & 0x0F;
+        return this.getDataOffset()*4;
     }
 
     @Override
@@ -103,20 +125,24 @@ public class TcpPacket extends AbstractPacket {
     }
 
     public AbstractPacket Decoder() {
-        logger.debug(getPayloadLength()+"");
         if(this.getPayloadLength()<4){
             return null;
         }
-        byte magic = this.mappedByteBufferLocater.getByte(TcpFrame.totalLength+2);
-        if(magic==0xd0){
-            DRDAPacket drdaPacket = new DRDAPacket(this.getPayload(),this);
+        MappedByteBufferLocater payloadMappedByteBufferLocater = this.getPayload();
+        int drdaLength = payloadMappedByteBufferLocater.getShort(0,ByteOrder.LITTLE_ENDIAN);
+        if(this.getPayloadLength()<drdaLength)
+            return null;
+        String magic = payloadMappedByteBufferLocater.getByteStrig(2);
+        if(magic.equals("D0")){
+            DRDAPacket drdaPacket = new DRDAPacket(payloadMappedByteBufferLocater,this);
+            logger.debug(drdaPacket.toString());
             return drdaPacket;
         }
         return null;
     }
 
     public int getPayloadLength(){
-        return ((Ipv4Packet)this.parent).getPayloadLength()-TcpFrame.totalLength;
+        return ((Ipv4Packet)this.parent).getPayloadLength()-this.getHeaderLength();
     }
 
     @Override

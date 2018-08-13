@@ -7,6 +7,8 @@ import java.nio.MappedByteBuffer;
 public class MappedByteBufferLocater extends AbstractLocater {
     private MappedByteBuffer mappedByteBuffer;
 
+    private char[] hexArray = "0123456789ABCDEF".toCharArray();
+
     private int baseOffset;
 
     public MappedByteBufferLocater(MappedByteBuffer _mappedByteBuffer, int _baseOffset){
@@ -76,6 +78,10 @@ public class MappedByteBufferLocater extends AbstractLocater {
         return this.mappedByteBuffer.get(this.baseOffset+offset);
     }
 
+    public String getByteStrig(int _offset){
+        return getByteString(_offset,1,ByteOrder.LITTLE_ENDIAN);
+    }
+
     public byte[] getBytes(int offset,int length){
         byte[] bytesData = new byte[length];
         for (int i = 0; i < length; i++) {
@@ -85,9 +91,6 @@ public class MappedByteBufferLocater extends AbstractLocater {
     }
 
     public String getByteString(int offset,int length, ByteOrder byteOrder){
-        char[] hexArray = "0123456789ABCDEF".toCharArray();
-        //byte[] bytes = new byte[length];
-        //this.mappedByteBuffer.get(bytes,offset,length);
         char[] hexChars = new char[length * 2];
         for ( int j = 0; j < length; j++ ) {
             //Fix byte order error,maybe there is another way

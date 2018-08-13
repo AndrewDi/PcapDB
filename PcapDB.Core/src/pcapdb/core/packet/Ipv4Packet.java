@@ -20,7 +20,7 @@ public class Ipv4Packet extends AbstractPacket {
 
     @Override
     public MappedByteBufferLocater getPayload() {
-        return new MappedByteBufferLocater(this.mappedByteBufferLocater,this.mappedByteBufferLocater.getBaseOffset()+IPv4Frame.totalLength);
+        return new MappedByteBufferLocater(this.mappedByteBufferLocater,this.mappedByteBufferLocater.getBaseOffset()+this.getHeaderLength());
     }
 
     public AbstractPacket Decoder(){
@@ -41,7 +41,7 @@ public class Ipv4Packet extends AbstractPacket {
     }
 
     public int getHeaderLength(){
-        return this.mappedByteBufferLocater.getByte(IPv4Frame.VersionAndHeaderLengthPosition) & 0x0F;
+        return (this.mappedByteBufferLocater.getByte(IPv4Frame.VersionAndHeaderLengthPosition) & 0x0F)*4;
     }
 
     public byte getDifferentiatedServices(){
