@@ -1,15 +1,55 @@
 package pcapdb.core.packet;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import pcapdb.core.buffer.MappedByteBufferLocater;
 import pcapdb.core.frame.DrdaCodePointType;
 import pcapdb.core.frame.DrdaFrame;
 
 import java.nio.ByteOrder;
+import java.util.LinkedList;
+import java.util.List;
 
 public class DrdaPacket extends AbstractPacket {
 
+    protected final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
+
+    private List<DrdaDDMParameter> drdaDDMParameters;
+
     public DrdaPacket(MappedByteBufferLocater _mappedByteBufferLocater, AbstractPacket _packet) {
         super(_mappedByteBufferLocater, _packet);
+    }
+
+    public List<DrdaDDMParameter> getDrdaDDMParameters() {
+        if(this.drdaDDMParameters==null) this.drdaDDMParameters=new LinkedList<>();
+        if(this.drdaDDMParameters.size()>0) return this.drdaDDMParameters;
+
+        int offset = DrdaFrame.totalLength;
+        while (offset<this.mappedByteBufferLocater.getLength()-DrdaFrame.totalLength){
+            int length = this.mappedByteBufferLocater.getShort(offset,ByteOrder.LITTLE_ENDIAN);
+            DrdaCodePointType drdaCodePointType = DrdaCodePointType.valueOf(this.mappedByteBufferLocater.getShort(offset+DrdaFrame.DDMLengthLength,ByteOrder.LITTLE_ENDIAN));
+            if(length==0||getDDMCodePoint()==DrdaCodePointType.SQLSTT||getDDMCodePoint()==DrdaCodePointType.QRYDTA||
+            getDDMCodePoint()==DrdaCodePointType.QRYDSC){
+                length = this.mappedByteBufferLocater.getLength() - DrdaFrame.totalLength - (DrdaFrame.DDMParameterLengthLength + DrdaFrame.DDMParameterCodePointLength);
+            }
+
+            DrdaDDMParameter drdaDDMParameter = new DrdaDDMParameter();
+            drdaDDMParameter.setLength(length);
+            drdaDDMParameter.setDrdaCodePointType(drdaCodePointType);
+
+            int startIndex = offset + DrdaFrame.DDMParameterLengthLength + DrdaFrame.DDMParameterCodePointLength;
+            int strlength = length;
+            if (drdaCodePointType == DrdaCodePointType.DATA || drdaCodePointType == DrdaCodePointType.QRYDTA) {
+                drdaDDMParameter.setData(this.mappedByteBufferLocater.getUTF8String(startIndex, strlength).trim());
+            }
+            else {
+                strlength-=4;
+                drdaDDMParameter.setData(this.mappedByteBufferLocater.getEbcdicString(startIndex, strlength).trim());
+            }
+            this.drdaDDMParameters.add(drdaDDMParameter);
+            offset+=length;
+        }
+        return this.drdaDDMParameters;
     }
 
     @Override
@@ -44,7 +84,8 @@ public class DrdaPacket extends AbstractPacket {
     @Override
     public String toString() {
         return "DrdaPacket{" +
-                "DDMLength=" + getDDMLength() +
+                "drdaDDMParameters=" + this.getDrdaDDMParameters() +
+                ", DDMLength=" + getDDMLength() +
                 ", DDMMagic='" + getDDMMagic() + '\'' +
                 ", DDMFormat=" + getDDMFormat() +
                 ", DDMCorrelId=" + getDDMCorrelId() +

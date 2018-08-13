@@ -1,6 +1,5 @@
 package pcapdb.core.frame;
 
-import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 public enum  DrdaCodePointType {
