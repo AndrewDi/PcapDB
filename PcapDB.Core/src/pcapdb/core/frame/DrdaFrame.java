@@ -13,10 +13,6 @@ public class DrdaFrame {
 
     public static int DDMCodePointLength = 2;
 
-    public static int DDMParameterLengthLength = 2;
-
-    public static int DDMParameterCodePointLength = 2;
-
     public static int DDMLengthPosition = 0 ;
 
     public static int DDMMagicPosition;
@@ -30,6 +26,11 @@ public class DrdaFrame {
     public static int DDMCodePointPosition;
 
     public static int totalLength;
+
+    //Extra Parameter Length
+    public static int DDMParameterLengthLength = 2;
+
+    public static int DDMParameterCodePointLength = 2;
 
     static {
         DDMMagicPosition = DDMLengthPosition+DDMLengthLength;

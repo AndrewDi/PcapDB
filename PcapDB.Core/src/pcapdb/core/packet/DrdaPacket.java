@@ -27,12 +27,28 @@ public class DrdaPacket extends AbstractPacket {
         if (this.drdaDDMParameters.size() > 0) return this.drdaDDMParameters;
 
         int offset = DrdaFrame.totalLength;
-        while (offset < this.mappedByteBufferLocater.getLength() - DrdaFrame.totalLength) {
+        int drdaPacketLength = this.mappedByteBufferLocater.getLength();
+
+        //Deal with SQLCARD Payload
+        if(this.getDDMCodePoint()==DrdaCodePointType.SQLCARD&&drdaPacketLength>offset+1){
+            int SQL_CODE = this.mappedByteBufferLocater.getInt(offset+1,ByteOrder.LITTLE_ENDIAN);
+            //String SQL_CODE = this.mappedByteBufferLocater.getUTF8String(offset+1,4);
+            String SQL_STATE = this.mappedByteBufferLocater.getUTF8String(offset+5,5);
+            String SQL_ERRPROC = this.mappedByteBufferLocater.getUTF8String(offset+10,8);
+            SQLResult sqlResult = new SQLResult(SQL_CODE,SQL_STATE,SQL_ERRPROC);
+            DrdaDDMParameter drdaDDMParameter = new DrdaDDMParameter();
+            drdaDDMParameter.setDrdaCodePointType(DrdaCodePointType.SQLCARD);
+            drdaDDMParameter.setData(sqlResult);
+            this.drdaDDMParameters.add(drdaDDMParameter);
+            return this.drdaDDMParameters;
+        }
+
+        while (offset < drdaPacketLength - DrdaFrame.totalLength) {
             int length = this.mappedByteBufferLocater.getShort(offset, ByteOrder.LITTLE_ENDIAN);
             DrdaCodePointType drdaCodePointType = DrdaCodePointType.valueOf(this.mappedByteBufferLocater.getShort(offset + DrdaFrame.DDMLengthLength, ByteOrder.LITTLE_ENDIAN));
             if (length == 0 || getDDMCodePoint() == DrdaCodePointType.SQLSTT || getDDMCodePoint() == DrdaCodePointType.QRYDTA ||
                     getDDMCodePoint() == DrdaCodePointType.QRYDSC) {
-                length = this.mappedByteBufferLocater.getLength() - DrdaFrame.totalLength - (DrdaFrame.DDMParameterLengthLength + DrdaFrame.DDMParameterCodePointLength);
+                length = drdaPacketLength - DrdaFrame.totalLength - (DrdaFrame.DDMParameterLengthLength + DrdaFrame.DDMParameterCodePointLength);
             }
 
             DrdaDDMParameter drdaDDMParameter = new DrdaDDMParameter();
