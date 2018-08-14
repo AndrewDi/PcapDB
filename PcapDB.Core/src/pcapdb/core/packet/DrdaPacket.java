@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 import pcapdb.core.buffer.MappedByteBufferLocater;
 import pcapdb.core.frame.DrdaCodePointType;
 import pcapdb.core.frame.DrdaFrame;
+import pcapdb.core.frame.SVRCODLevel;
+import pcapdb.core.frame.UOWDSP;
 
 import java.nio.ByteOrder;
 import java.util.LinkedList;
@@ -40,6 +42,7 @@ public class DrdaPacket extends AbstractPacket {
             int startIndex = offset + DrdaFrame.DDMParameterLengthLength + DrdaFrame.DDMParameterCodePointLength;
             int strlength = length;
             switch (drdaCodePointType) {
+                //Generate Data
                 case DATA:
                 case QRYDTA:
                     strlength -= 1;
@@ -58,6 +61,11 @@ public class DrdaPacket extends AbstractPacket {
                      strlength -= 16;
                      drdaDDMParameter.setData(this.mappedByteBufferLocater.getEbcdicString(startIndex, strlength).trim());
                      break;
+                case PKGSNLST:
+                    strlength-=24;
+                    startIndex+=4;
+                    drdaDDMParameter.setData(this.mappedByteBufferLocater.getEbcdicString(startIndex, strlength).trim());
+                    break;
                 case RSLSETFLG:
                     strlength-=1;
                     drdaDDMParameter.setData(this.mappedByteBufferLocater.getByteString(startIndex,strlength,ByteOrder.LITTLE_ENDIAN).trim());
@@ -66,6 +74,12 @@ public class DrdaPacket extends AbstractPacket {
                 case MAXRSLCNT:
                 case MAXBLKEXT:
                     drdaDDMParameter.setData(this.mappedByteBufferLocater.getShort(startIndex, ByteOrder.LITTLE_ENDIAN));
+                    break;
+                case SVRCOD:
+                    drdaDDMParameter.setData(SVRCODLevel.valueOf(this.mappedByteBufferLocater.getShort(startIndex, ByteOrder.LITTLE_ENDIAN)));
+                    break;
+                case UOWDSP:
+                    drdaDDMParameter.setData(UOWDSP.valueOf(this.mappedByteBufferLocater.getByte(startIndex)));
                     break;
                 default:
                     strlength -= 4;

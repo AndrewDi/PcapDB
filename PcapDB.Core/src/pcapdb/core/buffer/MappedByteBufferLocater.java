@@ -152,7 +152,7 @@ public class MappedByteBufferLocater extends AbstractLocater {
     public String EbcdicToAscii(byte[] data, int length) {
         byte[] byteData = new byte[length];
         for (int i = 0; i < data.length; i++) {
-            if ((data[i] & 0xFF) == 0x00) {
+            if ((data[i] & 0xFF) == 0x00||(data[i] & 0xFF) == 0xFF) {
                 byteData[i] = 0x20;
                 continue;
             }
