@@ -31,7 +31,13 @@ public class DrdaPacket extends AbstractPacket {
 
         //Deal with SQLCARD Payload
         if(this.getDDMCodePoint()==DrdaCodePointType.SQLCARD&&drdaPacketLength>offset+1){
-            int SQL_CODE = this.mappedByteBufferLocater.getInt(offset+1,ByteOrder.BIG_ENDIAN);
+            int SQL_CODE=0;
+            if(this.mappedByteBufferLocater.getByte(offset+1)==0x00) {
+                SQL_CODE = this.mappedByteBufferLocater.getInt(offset + 1, ByteOrder.LITTLE_ENDIAN);
+            }
+            else {
+                SQL_CODE = this.mappedByteBufferLocater.getInt(offset + 1, ByteOrder.BIG_ENDIAN);
+            }
             //String SQL_CODE = this.mappedByteBufferLocater.getUTF8String(offset+1,4);
             String SQL_STATE = this.mappedByteBufferLocater.getUTF8String(offset+5,5);
             String SQL_ERRPROC = this.mappedByteBufferLocater.getUTF8String(offset+10,8);
@@ -58,7 +64,6 @@ public class DrdaPacket extends AbstractPacket {
             int startIndex = offset + DrdaFrame.DDMParameterLengthLength + DrdaFrame.DDMParameterCodePointLength;
             int strlength = length;
             switch (drdaCodePointType) {
-                //Generate Data
                 case DATA:
                 case QRYDTA:
                     strlength -= 1;
