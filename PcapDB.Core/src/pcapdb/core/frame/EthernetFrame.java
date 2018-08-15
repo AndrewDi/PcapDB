@@ -1,20 +1,50 @@
 package pcapdb.core.frame;
 
+/**
+ * This class contains Ethernet LinkType Frame Structure
+ *
+ * @author PanDi(anonymous-oss@outlook.com)
+ */
 public class EthernetFrame {
-    public static int DestinationAddressLength=6;
 
-    public static int SourceAddressLength=6;
+    /**
+     * The length of DestinationAddress field
+     */
+    public static final int DestinationAddressLength=6;
 
-    public static int TypeLength=2;
+    /**
+     * The length of SourceAddress field
+     */
+    public static final int SourceAddressLength=6;
 
-    public static int DestinationAddressPosition=0;
+    /**
+     * The length of Type field
+     */
+    public static final int TypeLength=2;
 
-    public static int SourceAddressPosition;
+    /**
+     * The offset of DestinationAddress field
+     */
+    public static final int DestinationAddressPosition=0;
 
-    public static int TypePosition;
+    /**
+     * The offset of SourceAddress field
+     */
+    public static final int SourceAddressPosition;
 
-    public static int totalLength;
+    /**
+     * The offset of Type field
+     */
+    public static final int TypePosition;
 
+    /**
+     * The totalLength of this header
+     */
+    public static final int totalLength;
+
+    /**
+     * Calculater position offset
+     */
     static {
         SourceAddressPosition=DestinationAddressPosition+DestinationAddressLength;
         TypePosition = SourceAddressPosition+SourceAddressLength;

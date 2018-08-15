@@ -1,14 +1,27 @@
 package pcapdb.core.buffer;
 
-import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.MappedByteBuffer;
 
+/**
+ * This class is the basic bytebuffer to decode packet
+ *
+ * @author PanDi(anonymous-oss@outlook.com)
+ */
 public class MappedByteBufferLocater extends AbstractLocater {
     private MappedByteBuffer mappedByteBuffer;
 
-    private char[] hexArray = "0123456789ABCDEF".toCharArray();
-    private int[] e2aTable = new int[]{
+    /**
+     * Hex array was used to print byte string
+     * @see "getByteString(int offset, int length, ByteOrder byteOrder)"
+     */
+    private final char[] hexArray = "0123456789ABCDEF".toCharArray();
+
+    /**
+     * e2aTable was used to convert Ebcdic To Ascii String
+     * @see "EbcdicToAscii(byte[] data, int length)"
+     */
+    private final int[] e2aTable = new int[]{
             0, 1, 2, 3, 156, 9, 134, 127, 151, 141, 142, 11, 12, 13, 14, 15,
             16, 17, 18, 19, 157, 133, 8, 135, 24, 25, 146, 143, 28, 29, 30, 31,
             128, 129, 130, 131, 132, 10, 23, 27, 136, 137, 138, 139, 140, 5, 6, 7,
@@ -27,10 +40,21 @@ public class MappedByteBufferLocater extends AbstractLocater {
             48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 250, 251, 252, 253, 254, 255
     };
 
+    /**
+     * The length of this locater can read,not all packet use this length
+     */
     private int length;
 
+    /**
+     * The absolute offset in pcap file
+     */
     private int baseOffset;
 
+    /**
+     * Use @see MappedByteBuffer with new offset to build another MappedByteBufferLocater
+     * @param _mappedByteBuffer current MappedByteBuffer
+     * @param _baseOffset new offset
+     */
     public MappedByteBufferLocater(MappedByteBuffer _mappedByteBuffer, int _baseOffset) {
         this.mappedByteBuffer = _mappedByteBuffer;
         this.baseOffset = _baseOffset;
@@ -39,34 +63,53 @@ public class MappedByteBufferLocater extends AbstractLocater {
         this.mappedByteBuffer.order(ByteOrder.LITTLE_ENDIAN);
     }
 
+    /**
+     * Use @see MappedByteBufferLocater with new offset to build another MappedByteBufferLocater
+     * @param _mappedByteBufferLocater current MappedByteBufferLocater
+     * @param _baseoffset new offset
+     */
     public MappedByteBufferLocater(MappedByteBufferLocater _mappedByteBufferLocater, int _baseoffset) {
         this(_mappedByteBufferLocater.mappedByteBuffer, _baseoffset);
     }
 
+    /**
+     * Return current MappedByteBufferLocater Length
+     * @return current length
+     */
     public int getLength() {
         return length;
     }
 
+    /**
+     * Set MappedByteBufferLocater Length
+     * @param length new length
+     */
     public void setLength(int length) {
         this.length = length;
     }
 
+    /**
+     * Return current base offset
+     * @return
+     */
     public int getBaseOffset() {
         return baseOffset;
     }
 
-    public void resetBaseOffset() {
-        this.baseOffset = 0;
-    }
-
+    /**
+     * Return Is there still bytes can read in pcap files
+     * @return true or false
+     */
     public boolean hasRemaining() {
         return this.mappedByteBuffer.capacity() > this.baseOffset;
     }
 
-    public int getRemainLength() {
-        return this.mappedByteBuffer.remaining();
-    }
-
+    /**
+     * Decoder Int object(4 bytes/8 bits)
+     * @param _offset offset
+     * @param byteOrder BIG_ENDIAN or LITTLE_ENDIAN
+     * @return int value
+     */
     public int getInt(int _offset, ByteOrder byteOrder) {
         if (byteOrder == ByteOrder.BIG_ENDIAN)
             return getInt(_offset);
@@ -78,14 +121,30 @@ public class MappedByteBufferLocater extends AbstractLocater {
         }
     }
 
+    /**
+     * Decoder Int object in BIG_ENDIAN(4 bytes/8 bits)
+     * @param _offset offset
+     * @return int value
+     */
     public int getInt(int _offset) {
         return this.mappedByteBuffer.getInt(this.baseOffset + _offset);
     }
 
+    /**
+     * Decoder short object in BIG_ENDIAN(2 bytes/4 bits)
+     * @param _offset offset
+     * @return short value
+     */
     public short getShort(int _offset) {
         return this.mappedByteBuffer.getShort(this.baseOffset + _offset);
     }
 
+    /**
+     * Decoder short object(2 bytes/4 bits)
+     * @param _offset offset
+     * @param byteOrder BIG_ENDIAN or LITTLE_ENDIAN
+     * @return short value
+     */
     public int getShort(int _offset, ByteOrder byteOrder) {
         if (byteOrder == ByteOrder.BIG_ENDIAN)
             return getShort(_offset);
@@ -94,22 +153,48 @@ public class MappedByteBufferLocater extends AbstractLocater {
         }
     }
 
+    /**
+     * Decoder single byte object
+     * @param _offset offset
+     * @return int value
+     */
     public int getSingle(int _offset) {
         return this.getByte(_offset) & 0xFF;
     }
 
+    /**
+     * Decoder long object in BIG_ENDIAN(2 bytes/4 bits)
+     * @param _offset offset
+     * @return long value
+     */
     public long getLong(int _offset) {
         return this.mappedByteBuffer.getLong(this.baseOffset + _offset);
     }
 
+    /**
+     * Return one byte
+     * @param offset offset
+     * @return byte value
+     */
     public byte getByte(int offset) {
         return this.mappedByteBuffer.get(this.baseOffset + offset);
     }
 
+    /**
+     * Return one byte
+     * @param _offset offset
+     * @return byte value in String format
+     */
     public String getByteStrig(int _offset) {
         return getByteString(_offset, 1, ByteOrder.LITTLE_ENDIAN);
     }
 
+    /**
+     * Return @length bytes
+     * @param offset offset
+     * @param length length
+     * @return @length bytes
+     */
     public byte[] getBytes(int offset, int length) {
         byte[] bytesData = new byte[length];
         for (int i = 0; i < length; i++) {
@@ -118,6 +203,13 @@ public class MappedByteBufferLocater extends AbstractLocater {
         return bytesData;
     }
 
+    /**
+     * Retrun bytes in String Format
+     * @param offset offset
+     * @param length length
+     * @param byteOrder  BIG_ENDIAN or LITTLE_ENDIAN
+     * @return String format bytes
+     */
     public String getByteString(int offset, int length, ByteOrder byteOrder) {
         char[] hexChars = new char[length * 2];
         for (int j = 0; j < length; j++) {
@@ -134,6 +226,12 @@ public class MappedByteBufferLocater extends AbstractLocater {
         return new String(hexChars);
     }
 
+    /**
+     * Decoder bytes into ASCII UTF8 String
+     * @param offset offset
+     * @param length length
+     * @return ASCII UTF8 String
+     */
     public String getUTF8String(int offset, int length) {
         byte[] data = this.getBytes(offset, length);
         for (int i=0;i<data.length;i++){
@@ -145,10 +243,22 @@ public class MappedByteBufferLocater extends AbstractLocater {
         return new String(data);
     }
 
+    /**
+     * Decoder bytes into ASCII UTF8 String(Convert from EBCDIC)
+     * @param offset offset
+     * @param length length
+     * @return ASCII UTF8 String
+     */
     public String getEbcdicString(int offset, int length) {
         return EbcdicToAscii(this.getBytes(offset, length), length);
     }
 
+    /**
+     * Convert EBCDIC to ASCII String
+     * @param data data to convert
+     * @param length length
+     * @return ASCII UTF8 String
+     */
     public String EbcdicToAscii(byte[] data, int length) {
         byte[] byteData = new byte[length];
         for (int i = 0; i < data.length; i++) {
@@ -169,10 +279,21 @@ public class MappedByteBufferLocater extends AbstractLocater {
         return this.mappedByteBuffer.position();
     }
 
+    /**
+     * Decoder Unsigned int value
+     * @param _offset offset
+     * @return long value
+     */
     public long getUnsignedInt(int _offset) {
         return this.getInt(_offset) & 0xFFFFFFFFL;
     }
 
+    /**
+     * Decoder Unsigned int value
+     * @param _offset offset
+     * @param byteOrder BIG_ENDIAN or LITTLE_ENDIAN
+     * @return long value
+     */
     public long getUnsignedInt(int _offset, ByteOrder byteOrder) {
         return this.getInt(_offset, byteOrder) & 0xFFFFFFFFL;
     }

@@ -2,6 +2,12 @@ package pcapdb.core.frame;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * This enum class contains all Code Point Type
+ * {@link "https://www.wireshark.org/docs/dfref/d/drda.html" }
+ *
+ * @author PanDi(anonymous-oss@outlook.com)
+ */
 public enum  DrdaCodePointType {
     DATA(0x0000),
     CODPNT(0x000C),
@@ -185,8 +191,11 @@ public enum  DrdaCodePointType {
     SQLATTR(0x2450),
     DYNDTAFMT(0x214B);
 
-    private static ConcurrentHashMap<Integer,DrdaCodePointType> hashMap;
+    private static final ConcurrentHashMap<Integer,DrdaCodePointType> hashMap;
 
+    /**
+     * internal use only
+     */
     private int value;
 
     DrdaCodePointType(int _value) {
@@ -205,6 +214,11 @@ public enum  DrdaCodePointType {
         return this.value;
     }
 
+    /**
+     * Convert bytes to enmu type
+     * @param _value Type in bytes
+     * @return Type in enum
+     */
     public static DrdaCodePointType valueOf(int _value) {
         return hashMap.getOrDefault(_value,DrdaCodePointType.DATA);
     }

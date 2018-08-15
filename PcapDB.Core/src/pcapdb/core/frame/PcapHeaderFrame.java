@@ -61,6 +61,7 @@ public class PcapHeaderFrame implements Serializable {
                 ", iSigFlagsPosition=" + iSigFlagsPosition +
                 ", iSnapLenPosition=" + iSnapLenPosition +
                 ", iLinkTypePosition=" + iLinkTypePosition +
+                ", totalLength=" + totalLength +
                 '}';
     }
 }
