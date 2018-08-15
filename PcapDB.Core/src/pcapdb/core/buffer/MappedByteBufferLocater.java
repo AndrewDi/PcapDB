@@ -52,12 +52,12 @@ public class MappedByteBufferLocater extends AbstractLocater {
 
     /**
      * Use @see MappedByteBuffer with new offset to build another MappedByteBufferLocater
-     * @param _mappedByteBuffer current MappedByteBuffer
-     * @param _baseOffset new offset
+     * @param mappedByteBuffer current MappedByteBuffer
+     * @param baseOffset new offset
      */
-    public MappedByteBufferLocater(MappedByteBuffer _mappedByteBuffer, int _baseOffset) {
-        this.mappedByteBuffer = _mappedByteBuffer;
-        this.baseOffset = _baseOffset;
+    public MappedByteBufferLocater(MappedByteBuffer mappedByteBuffer, int baseOffset) {
+        this.mappedByteBuffer = mappedByteBuffer;
+        this.baseOffset = baseOffset;
 
         //Current only support little endian
         this.mappedByteBuffer.order(ByteOrder.LITTLE_ENDIAN);
@@ -65,11 +65,11 @@ public class MappedByteBufferLocater extends AbstractLocater {
 
     /**
      * Use @see MappedByteBufferLocater with new offset to build another MappedByteBufferLocater
-     * @param _mappedByteBufferLocater current MappedByteBufferLocater
-     * @param _baseoffset new offset
+     * @param mappedByteBufferLocater current MappedByteBufferLocater
+     * @param baseoffset new offset
      */
-    public MappedByteBufferLocater(MappedByteBufferLocater _mappedByteBufferLocater, int _baseoffset) {
-        this(_mappedByteBufferLocater.mappedByteBuffer, _baseoffset);
+    public MappedByteBufferLocater(MappedByteBufferLocater mappedByteBufferLocater, int baseoffset) {
+        this(mappedByteBufferLocater.mappedByteBuffer, baseoffset);
     }
 
     /**
@@ -123,52 +123,52 @@ public class MappedByteBufferLocater extends AbstractLocater {
 
     /**
      * Decoder Int object in BIG_ENDIAN(4 bytes/8 bits)
-     * @param _offset offset
+     * @param offset offset
      * @return int value
      */
-    public int getInt(int _offset) {
-        return this.mappedByteBuffer.getInt(this.baseOffset + _offset);
+    public int getInt(int offset) {
+        return this.mappedByteBuffer.getInt(this.baseOffset + offset);
     }
 
     /**
      * Decoder short object in BIG_ENDIAN(2 bytes/4 bits)
-     * @param _offset offset
+     * @param offset offset
      * @return short value
      */
-    public short getShort(int _offset) {
-        return this.mappedByteBuffer.getShort(this.baseOffset + _offset);
+    public short getShort(int offset) {
+        return this.mappedByteBuffer.getShort(this.baseOffset + offset);
     }
 
     /**
      * Decoder short object(2 bytes/4 bits)
-     * @param _offset offset
+     * @param offset offset
      * @param byteOrder BIG_ENDIAN or LITTLE_ENDIAN
      * @return short value
      */
-    public int getShort(int _offset, ByteOrder byteOrder) {
+    public int getShort(int offset, ByteOrder byteOrder) {
         if (byteOrder == ByteOrder.BIG_ENDIAN)
-            return getShort(_offset);
+            return getShort(offset);
         else {
-            return this.getByte(_offset + 1) & 0xFF | (this.getByte(_offset) & 0xFF) << 8;
+            return this.getByte(offset + 1) & 0xFF | (this.getByte(offset) & 0xFF) << 8;
         }
     }
 
     /**
      * Decoder single byte object
-     * @param _offset offset
+     * @param offset offset
      * @return int value
      */
-    public int getSingle(int _offset) {
-        return this.getByte(_offset) & 0xFF;
+    public int getSingle(int offset) {
+        return this.getByte(offset) & 0xFF;
     }
 
     /**
      * Decoder long object in BIG_ENDIAN(2 bytes/4 bits)
-     * @param _offset offset
+     * @param offset offset
      * @return long value
      */
-    public long getLong(int _offset) {
-        return this.mappedByteBuffer.getLong(this.baseOffset + _offset);
+    public long getLong(int offset) {
+        return this.mappedByteBuffer.getLong(this.baseOffset + offset);
     }
 
     /**
@@ -182,11 +182,11 @@ public class MappedByteBufferLocater extends AbstractLocater {
 
     /**
      * Return one byte
-     * @param _offset offset
+     * @param offset offset
      * @return byte value in String format
      */
-    public String getByteStrig(int _offset) {
-        return getByteString(_offset, 1, ByteOrder.LITTLE_ENDIAN);
+    public String getByteStrig(int offset) {
+        return getByteString(offset, 1, ByteOrder.LITTLE_ENDIAN);
     }
 
     /**
@@ -271,8 +271,8 @@ public class MappedByteBufferLocater extends AbstractLocater {
         return new String(byteData);
     }
 
-    public char getChar(int _offset) {
-        return this.mappedByteBuffer.getChar(this.baseOffset + _offset);
+    public char getChar(int offset) {
+        return this.mappedByteBuffer.getChar(this.baseOffset + offset);
     }
 
     public long getPhysicOffset() {
@@ -281,28 +281,28 @@ public class MappedByteBufferLocater extends AbstractLocater {
 
     /**
      * Decoder Unsigned int value
-     * @param _offset offset
+     * @param offset offset
      * @return long value
      */
-    public long getUnsignedInt(int _offset) {
-        return this.getInt(_offset) & 0xFFFFFFFFL;
+    public long getUnsignedInt(int offset) {
+        return this.getInt(offset) & 0xFFFFFFFFL;
     }
 
     /**
      * Decoder Unsigned int value
-     * @param _offset offset
+     * @param offset offset
      * @param byteOrder BIG_ENDIAN or LITTLE_ENDIAN
      * @return long value
      */
-    public long getUnsignedInt(int _offset, ByteOrder byteOrder) {
-        return this.getInt(_offset, byteOrder) & 0xFFFFFFFFL;
+    public long getUnsignedInt(int offset, ByteOrder byteOrder) {
+        return this.getInt(offset, byteOrder) & 0xFFFFFFFFL;
     }
 
     public long unsignedInt(final byte a, final byte b, final byte c, final byte d) {
         return (a & 0xff) << 24 | (b & 0xff) << 16 | (c & 0xff) << 8 | d & 0xff;
     }
 
-    public int getUnsignedShort(int _offset) {
-        return getShort(_offset) & 0xFFFF;
+    public int getUnsignedShort(int offset) {
+        return getShort(offset) & 0xFFFF;
     }
 }

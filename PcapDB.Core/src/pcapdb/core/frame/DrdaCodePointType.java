@@ -4,7 +4,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * This enum class contains all Code Point Type
- * {@link "https://www.wireshark.org/docs/dfref/d/drda.html" }
+ * @see <a href="https://www.wireshark.org/docs/dfref/d/drda.html">Drda CodePoint</a>
  *
  * @author PanDi(anonymous-oss@outlook.com)
  */

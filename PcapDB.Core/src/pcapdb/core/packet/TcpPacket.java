@@ -10,7 +10,7 @@ import java.nio.ByteOrder;
 public class TcpPacket extends AbstractPacket {
 
     /**
-     *  ref http://www.ietf.org/rfc/rfc793.txt
+     * @see <a href="http://www.ietf.org/rfc/rfc793.txt">rfc793</a>
      *
      *     0                   1                   2                   3
      *     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -35,8 +35,8 @@ public class TcpPacket extends AbstractPacket {
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
-    public TcpPacket(MappedByteBufferLocater _mappedByteBufferLocater, AbstractPacket _packet) {
-        super(_mappedByteBufferLocater, _packet);
+    public TcpPacket(MappedByteBufferLocater mappedByteBufferLocater, AbstractPacket abstractPacket) {
+        super(mappedByteBufferLocater, abstractPacket);
     }
 
     public int HeaderMinimumLength = 20;

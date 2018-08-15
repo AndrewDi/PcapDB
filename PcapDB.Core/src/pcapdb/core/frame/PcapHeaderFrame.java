@@ -2,37 +2,87 @@ package pcapdb.core.frame;
 
 import java.io.Serializable;
 
+/**
+ * This class contains Pcap File Header Structure
+ *
+ * @author PanDi(anonymous-oss@outlook.com)
+ */
 public class PcapHeaderFrame implements Serializable {
 
-    public static int iMagicLength = 4;
+    /**
+     * The length of iMagic field
+     */
+    public static final int iMagicLength = 4;
 
-    public static int iMaVersionLength=2;
+    /**
+     * The length of iMaversion field
+     */
+    public static final int iMaVersionLength=2;
 
-    public static int iMiVersionLength=2;
+    /**
+     * The length of iMiVersion field
+     */
+    public static final int iMiVersionLength=2;
 
-    public static int iTimezoneLength=4;
+    /**
+     * The length of iTimezone field
+     */
+    public static final int iTimezoneLength=4;
 
-    public static int iSigFlagsLength=4;
+    /**
+     * The length of iSigFlags field
+     */
+    public static final int iSigFlagsLength=4;
 
-    public static int iSnapLenLength=4;
+    /**
+     * The length of iSnapLen field
+     */
+    public static final int iSnapLenLength=4;
 
-    public static int iLinkTypeLength=4;
+    /**
+     * The length of iLinkType field
+     */
+    public static final int iLinkTypeLength=4;
 
-    public static int iMagicPosition = 0;
+    /**
+     * The offset of iMagic field
+     */
+    public static final int iMagicPosition = 0;
 
-    public static int iMaVersionPosition;
+    /**
+     * The offset of iMaversion field
+     */
+    public static final int iMaVersionPosition;
 
-    public static int iMiVersionPosition;
+    /**
+     * The offset of iMiVersion field
+     */
+    public static final int iMiVersionPosition;
 
-    public static int iTimezonePosition;
+    /**
+     * The offset of iTimezone field
+     */
+    public static final int iTimezonePosition;
 
-    public static int iSigFlagsPosition;
+    /**
+     * The offset of iSigFlags field
+     */
+    public static final int iSigFlagsPosition;
 
-    public static int iSnapLenPosition;
+    /**
+     * The offset of iSnapLen field
+     */
+    public static final int iSnapLenPosition;
 
-    public static int iLinkTypePosition;
+    /**
+     * The offset of iLinkType field
+     */
+    public static final int iLinkTypePosition;
 
-    public static int totalLength;
+    /**
+     * The totalLength of this header
+     */
+    public static final int totalLength;
 
     static {
         iMaVersionPosition=iMagicPosition+iMagicLength;

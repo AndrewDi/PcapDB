@@ -11,12 +11,8 @@ public class EthernetPacket extends AbstractPacket {
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
-    public EthernetPacket(MappedByteBufferLocater _mappedByteBufferLocater, AbstractPacket _packet) {
-        super(_mappedByteBufferLocater,_packet);
-    }
-
-    public EthernetPacket(MappedByteBufferLocater _mappedByteBufferLocater) {
-        super(_mappedByteBufferLocater);
+    public EthernetPacket(MappedByteBufferLocater mappedByteBufferLocater, AbstractPacket abstractPacket) {
+        super(mappedByteBufferLocater,abstractPacket);
     }
 
     public String getDestinationAddress(){

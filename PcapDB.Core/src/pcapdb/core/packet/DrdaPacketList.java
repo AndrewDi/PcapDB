@@ -15,8 +15,8 @@ public class DrdaPacketList extends AbstractPacket {
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
-    public DrdaPacketList(MappedByteBufferLocater _mappedByteBufferLocater, AbstractPacket _packet) {
-        super(_mappedByteBufferLocater, _packet);
+    public DrdaPacketList(MappedByteBufferLocater mappedByteBufferLocater, AbstractPacket abstractPacket) {
+        super(mappedByteBufferLocater, abstractPacket);
         this.decoder();
     }
 

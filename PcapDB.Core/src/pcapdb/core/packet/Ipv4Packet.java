@@ -14,8 +14,27 @@ public class Ipv4Packet extends AbstractPacket {
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
-    public Ipv4Packet(MappedByteBufferLocater _mappedByteBufferLocater,AbstractPacket _packet) {
-        super(_mappedByteBufferLocater,_packet);
+    /**
+     * @see <a href="http://www.ietf.org/rfc/rfc791.txt">rfc791</a>
+     *     0                   1                   2                   3
+     *     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+     *    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     *    |Version|  IHL  |Type of Service|          Total Length         |
+     *    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     *    |         Identification        |Flags|      Fragment Offset    |
+     *    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     *    |  Time to Live |    Protocol   |         Header Checksum       |
+     *    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     *    |                       Source Address                          |
+     *    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     *    |                    Destination Address                        |
+     *    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     *    |                    Options                    |    Padding    |
+     *    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+     */
+
+    public Ipv4Packet(MappedByteBufferLocater mappedByteBufferLocater,AbstractPacket abstractPacket) {
+        super(mappedByteBufferLocater,abstractPacket);
     }
 
     @Override

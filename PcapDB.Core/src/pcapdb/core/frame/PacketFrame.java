@@ -1,28 +1,59 @@
 package pcapdb.core.frame;
 
+/**
+ * This class contains Packet Header Structure
+ *
+ * @author PanDi(anonymous-oss@outlook.com)
+ */
 public class PacketFrame {
-    public PacketFrame(){}
 
-    public static int GMTtimeLength=4;
+    /**
+     * The length of GMTtime field
+     */
+    public static final int GMTTimeLength =4;
 
-    public static int MicroTimeLength=4;
+    /**
+     * The length of MicroTime field
+     */
+    public static final int MicroTimeLength=4;
 
-    public static int CapLenLength=4;
+    /**
+     * The length of Capture Length field
+     */
+    public static final int CapLenLength=4;
 
-    public static int LenLength=4;
+    /**
+     * The length of Length field
+     */
+    public static final int LenLength=4;
 
-    public static int GMTTimePosition=0;
+    /**
+     * The offset of GMTTime field
+     */
+    public static final int GMTTimePosition=0;
 
-    public static int MicroTimePosition;
+    /**
+     * The offset of MicroTime field
+     */
+    public static final int MicroTimePosition;
 
-    public static int CapLenPosition;
+    /**
+     * The offset of Capture Length field
+     */
+    public static final int CapLenPosition;
 
-    public static int LenPosition;
+    /**
+     * The offset of Length field
+     */
+    public static final int LenPosition;
 
-    public static int totalLength;
+    /**
+     * The totalLength of this header
+     */
+    public static final int totalLength;
 
     static {
-        MicroTimePosition=GMTTimePosition+GMTtimeLength;
+        MicroTimePosition=GMTTimePosition+ GMTTimeLength;
         CapLenPosition=MicroTimePosition+MicroTimeLength;
         LenPosition=CapLenPosition+CapLenLength;
         totalLength=LenPosition+LenLength;
@@ -31,7 +62,7 @@ public class PacketFrame {
     @Override
     public String toString() {
         return "PacketFrame{" +
-                "GMTtimeLength=" + GMTtimeLength +
+                "GMTTimeLength=" + GMTTimeLength +
                 ", MicroTimeLength=" + MicroTimeLength +
                 ", CapLenLength=" + CapLenLength +
                 ", LenLength=" + LenLength +

@@ -20,13 +20,13 @@ public class CapturePcapFile {
 
     /**
      * Open file with MappedByteBuffer
-     * @param _path Full file path
+     * @param path Full file path
      * @return Basic MappedByteBufferLocater object
      */
-    public static MappedByteBufferLocater OpenFile(String _path){
+    public static MappedByteBufferLocater OpenFile(String path){
         try {
-            logger.debug("Open Capture File: {}", _path);
-            RandomAccessFile randomAccessFile = new RandomAccessFile(_path,"r");
+            logger.debug("Open Capture File: {}", path);
+            RandomAccessFile randomAccessFile = new RandomAccessFile(path,"r");
             FileChannel fileChannel = randomAccessFile.getChannel();
             long fileSize = fileChannel.size();
             MappedByteBuffer mappedByteBuffer = fileChannel.map(FileChannel.MapMode.READ_ONLY,0,fileSize);

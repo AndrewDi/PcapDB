@@ -1,50 +1,98 @@
 package pcapdb.core.frame;
 
+/**
+ * This class contains TCP Header Structure
+ *
+ * @author PanDi(anonymous-oss@outlook.com)
+ */
 public class TcpFrame {
 
-    public static int TCP_NS_MASK = 0x0100;
-    public static int TCP_CWR_MASK = 0x0080;
-    public static int TCP_ECN_MASK = 0x0040;
-    public static int TCP_URG_MASK = 0x0020;
-    public static int TCP_ACK_MASK = 0x0010;
-    public static int TCP_PSH_MASK = 0x0008;
-    public static int TCP_RST_MASK = 0x0004;
-    public static int TCP_SYN_MASK = 0x0002;
-    public static int TCP_FIN_MASK = 0x0001;
+    public static final int TCP_NS_MASK = 0x0100;
+    public static final int TCP_CWR_MASK = 0x0080;
+    public static final int TCP_ECN_MASK = 0x0040;
+    public static final int TCP_URG_MASK = 0x0020;
+    public static final int TCP_ACK_MASK = 0x0010;
+    public static final int TCP_PSH_MASK = 0x0008;
+    public static final int TCP_RST_MASK = 0x0004;
+    public static final int TCP_SYN_MASK = 0x0002;
+    public static final int TCP_FIN_MASK = 0x0001;
 
-    public static int PortLength = 2;
+    public static final int PortLength = 2;
 
-    /// <summary> Length of the sequence number in bytes.</summary>
-    public static int SequenceNumberLength = 4;
-    /// <summary> Length of the acknowledgment number in bytes.</summary>
-    public static int AckNumberLength = 4;
-    /// <summary> Length of the data offset and flags field in bytes.</summary>
-    public static int DataOffsetAndFlagsLength = 2;
-    /// <summary> Length of the window size field in bytes.</summary>
-    public static int WindowSizeLength = 2;
-    /// <summary> Length of the checksum field in bytes.</summary>
-    public static int ChecksumLength = 2;
-    /// <summary> Length of the urgent field in bytes.</summary>
-    public static int UrgentPointerLength = 2;
+    /**
+     * The length of Sequence Number field
+     */
+    public static final int SequenceNumberLength = 4;
 
-    /// <summary> Position of the source port field.</summary>
-    public static int SourcePortPosition = 0;
-    /// <summary> Position of the destination port field.</summary>
-    public static int DestinationPortPosition;
-    /// <summary> Position of the sequence number field.</summary>
-    public static int SequenceNumberPosition;
-    /// <summary> Position of the acknowledgment number field.</summary>
-    public static int AckNumberPosition;
-    /// <summary> Position of the data offset </summary>
-    public static int DataOffsetAndFlagsPosition;
-    /// <summary> Position of the window size field.</summary>
-    public static int WindowSizePosition;
-    /// <summary> Position of the checksum field.</summary>
-    public static int ChecksumPosition;
-    /// <summary> Position of the urgent pointer field.</summary>
-    public static int UrgentPointerPosition;
+    /**
+     * The length of Ack Number field
+     */
+    public static final int AckNumberLength = 4;
 
-    public static int totalLength;
+    /**
+     * The length of data offset and flags field
+     */
+    public static final int DataOffsetAndFlagsLength = 2;
+
+    /**
+     * The length of Window Size field
+     */
+    public static final int WindowSizeLength = 2;
+
+    /**
+     * The length of Checksum field
+     */
+    public static final int ChecksumLength = 2;
+
+    /**
+     * The length of UrgentPointer field
+     */
+    public static final int UrgentPointerLength = 2;
+
+    /**
+     * The offset of Source Port field
+     */
+    public static final int SourcePortPosition = 0;
+
+    /**
+     * The offset of Destination Port field
+     */
+    public static final int DestinationPortPosition;
+
+    /**
+     * The offset of Sequence Number field
+     */
+    public static final int SequenceNumberPosition;
+
+    /**
+     * The offset of Ack Number field
+     */
+    public static final int AckNumberPosition;
+
+    /**
+     * The offset of Data offset and flags field
+     */
+    public static final int DataOffsetAndFlagsPosition;
+
+    /**
+     * The offset of Window Size field
+     */
+    public static final int WindowSizePosition;
+
+    /**
+     * The offset of Checksum field
+     */
+    public static final int ChecksumPosition;
+
+    /**
+     * The offset of UrgentPointer field
+     */
+    public static final int UrgentPointerPosition;
+
+    /**
+     * The totalLength of this header
+     */
+    public static final int totalLength;
 
     static {
         DestinationPortPosition = SourcePortPosition + PortLength;

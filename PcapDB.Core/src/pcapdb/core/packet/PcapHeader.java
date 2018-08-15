@@ -12,8 +12,8 @@ import java.nio.ByteOrder;
 public class PcapHeader extends AbstractPacket{
     protected final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
-    public PcapHeader(MappedByteBufferLocater _mappedByteBufferLocater){
-        super(_mappedByteBufferLocater);
+    public PcapHeader(MappedByteBufferLocater mappedByteBufferLocater){
+        super(mappedByteBufferLocater);
     }
 
     @Override

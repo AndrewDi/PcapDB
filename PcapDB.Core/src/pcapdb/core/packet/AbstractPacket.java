@@ -2,6 +2,11 @@ package pcapdb.core.packet;
 
 import pcapdb.core.buffer.MappedByteBufferLocater;
 
+/**
+ * All packet should extends on this abstract packets
+ *
+ * @author PanDi(anonymous-oss@outlook.com)
+ */
 public abstract class AbstractPacket {
     protected MappedByteBufferLocater mappedByteBufferLocater;
 
@@ -11,13 +16,13 @@ public abstract class AbstractPacket {
         return parent;
     }
 
-    public AbstractPacket(MappedByteBufferLocater _mappedByteBufferLocater, AbstractPacket _packet){
-        this.mappedByteBufferLocater=_mappedByteBufferLocater;
-        this.parent = _packet;
+    public AbstractPacket(MappedByteBufferLocater mappedByteBufferLocater, AbstractPacket abstractPacket){
+        this.mappedByteBufferLocater=mappedByteBufferLocater;
+        this.parent = abstractPacket;
     }
 
-    public AbstractPacket(MappedByteBufferLocater _mappedByteBufferLocater){
-        this.mappedByteBufferLocater=_mappedByteBufferLocater;
+    public AbstractPacket(MappedByteBufferLocater mappedByteBufferLocater){
+        this.mappedByteBufferLocater=mappedByteBufferLocater;
     }
 
     public abstract MappedByteBufferLocater getPayload();

@@ -3,49 +3,118 @@ package pcapdb.core.frame;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * This class contains IPv4 Packet Structure
+ * @{link http://www.ietf.org/rfc/rfc793.txt}
+ *
+ * @author PanDi(anonymous-oss@outlook.com)
+ */
 public class IPv4Frame {
     protected final Logger logger = LoggerFactory.getLogger(this.toString());
 
-    public static int VersionAndHeaderLengthLength = 1;
+    /**
+     * The length of VersionAndHeaderLength field
+     */
+    public static final int VersionAndHeaderLengthLength = 1;
 
-    public static int DifferentiatedServicesLength = 1;
+    /**
+     * The length of DifferentiatedServices field
+     */
+    public static final int DifferentiatedServicesLength = 1;
 
-    public static int TotalLengthLength = 2;
+    /**
+     * The length of TotalLength field
+     */
+    public static final int TotalLengthLength = 2;
 
-    public static int IdLength = 2;
+    /**
+     * The length of Id field
+     */
+    public static final int IdLength = 2;
 
-    public static int FragmentOffsetAndFlagsLength=2;
+    /**
+     * The length of FragmentOffsetAndFlags field
+     */
+    public static final int FragmentOffsetAndFlagsLength=2;
 
-    public static int TtlLength = 1;
+    /**
+     * The length of Time to live field
+     */
+    public static final int TtlLength = 1;
 
-    public static int ProtocolLength = 1;
+    /**
+     * The length of Protocol field
+     */
+    public static final int ProtocolLength = 1;
 
-    public static int ChecksumLength = 2;
+    /**
+     * The length of Checksum field
+     */
+    public static final int ChecksumLength = 2;
 
-    public static int VersionAndHeaderLengthPosition = 0;
+    /**
+     * The offset of VersionAndHeaderLength field
+     */
+    public static final int VersionAndHeaderLengthPosition = 0;
 
-    public static int AddressLength = 4;
+    /**
+     * The length of IPv4 Address field
+     */
+    public static final int AddressLength = 4;
 
-    public static int DifferentiatedServicesPosition;
+    /**
+     * The offset of DifferentiatedServices field
+     */
+    public static final int DifferentiatedServicesPosition;
 
-    public static int TotalLengthPosition;
+    /**
+     * The offset of TotalLength field
+     */
+    public static final int TotalLengthPosition;
 
-    public static int IdPosition;
+    /**
+     * The offset of Id field
+     */
+    public static final int IdPosition;
 
-    public static int FragmentOffsetAndFlagsPosition;
+    /**
+     * The offset of FragmentOffsetAndFlags field
+     */
+    public static final int FragmentOffsetAndFlagsPosition;
 
-    public static int TtlPosition;
+    /**
+     * The offset of Time to live field
+     */
+    public static final int TtlPosition;
 
-    public static int ProtocolPosition;
+    /**
+     * The offset of Protocol field
+     */
+    public static final int ProtocolPosition;
 
-    public static int ChecksumPosition;
+    /**
+     * The offset of Checksum field
+     */
+    public static final int ChecksumPosition;
 
-    public static int SourcePosition;
+    /**
+     * The offset of Source field
+     */
+    public static final int SourcePosition;
 
-    public static int DestinationPosition;
+    /**
+     * The offset of Destination field
+     */
+    public static final int DestinationPosition;
 
-    public static int totalLength;
+    /**
+     * The totalLength of this header
+     */
+    public static final int totalLength;
 
+    /**
+     * Calculater position offset
+     */
     static {
         DifferentiatedServicesPosition = VersionAndHeaderLengthPosition + VersionAndHeaderLengthLength;
         TotalLengthPosition = DifferentiatedServicesPosition + DifferentiatedServicesLength;

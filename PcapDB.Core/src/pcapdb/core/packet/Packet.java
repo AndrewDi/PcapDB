@@ -14,8 +14,8 @@ import java.util.Date;
 public class Packet extends AbstractPacket {
     protected final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
-    public Packet(MappedByteBufferLocater _mappedByteBufferLocater) {
-        super(_mappedByteBufferLocater);
+    public Packet(MappedByteBufferLocater mappedByteBufferLocater) {
+        super(mappedByteBufferLocater);
     }
 
     @Override

@@ -18,8 +18,8 @@ public class DrdaPacket extends AbstractPacket {
 
     private List<DrdaDDMParameter> drdaDDMParameters;
 
-    public DrdaPacket(MappedByteBufferLocater _mappedByteBufferLocater, AbstractPacket _packet) {
-        super(_mappedByteBufferLocater, _packet);
+    public DrdaPacket(MappedByteBufferLocater mappedByteBufferLocater, AbstractPacket abstractPacket) {
+        super(mappedByteBufferLocater, abstractPacket);
     }
 
     public List<DrdaDDMParameter> getDrdaDDMParameters() {
