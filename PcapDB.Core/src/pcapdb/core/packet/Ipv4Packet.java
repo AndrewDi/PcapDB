@@ -47,7 +47,7 @@ public class Ipv4Packet extends AbstractPacket {
             //Decode TCP Protocol
             case 6:
                 TcpPacket tcpPacket = new TcpPacket(this.getPayload(),this);
-                logger.debug(tcpPacket.toString());
+                //logger.debug(tcpPacket.toString());
                 return tcpPacket.Decoder();
 
             default:
@@ -115,7 +115,6 @@ public class Ipv4Packet extends AbstractPacket {
 
     @Override
     public String toString() {
-        logger.debug(new IPv4Frame().toString());
         return "Ipv4Packet{" +
                 "version=" + getVersion() +
                 ", headerLength=" + getHeaderLength() +

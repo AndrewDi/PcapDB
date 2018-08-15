@@ -54,11 +54,11 @@ public class Packet extends AbstractPacket {
 
         //Only support Ethernet Packet
         EthernetPacket ethernetPacket = new EthernetPacket(this.getPayload(),this);
-        logger.debug(ethernetPacket.toString());
+        //logger.debug(ethernetPacket.toString());
         switch (ethernetPacket.getType()){
             case "0800":
                 Ipv4Packet ipv4Packet = new Ipv4Packet(ethernetPacket.getPayload(),ethernetPacket);
-                logger.debug(ipv4Packet.toString());
+                //logger.debug(ipv4Packet.toString());
                 return ipv4Packet.Decoder();
             case "86DD":
                 //Ipv6 Packet
@@ -69,7 +69,6 @@ public class Packet extends AbstractPacket {
 
     @Override
     public String toString() {
-        logger.debug(new PacketFrame().toString());
         return "Packet{" +
                 "GMTtime="+this.getGMTtime() +
                 ", MicroTime="+this.getMicroTime() +

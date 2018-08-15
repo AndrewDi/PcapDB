@@ -138,7 +138,7 @@ public class TcpPacket extends AbstractPacket {
         //0xD0 means this a DRDA packet
         if(magic.equals("D0")){
             DrdaPacketList drdaPacketList = new DrdaPacketList(payloadMappedByteBufferLocater,this);
-            logger.debug(drdaPacketList.toString());
+            //logger.debug(drdaPacketList.toString());
             return drdaPacketList;
         }
         return null;
@@ -150,7 +150,6 @@ public class TcpPacket extends AbstractPacket {
 
     @Override
     public String toString() {
-        logger.debug(new TcpFrame().toString());
         return "TcpPacket{" +
                 "sourcePort=" + getSourcePort() +
                 ", destinationPort=" + getDestinationPort() +

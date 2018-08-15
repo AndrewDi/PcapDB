@@ -51,7 +51,6 @@ public class PcapHeader extends AbstractPacket{
 
     @Override
     public String toString() {
-        logger.debug(new PcapHeaderFrame().toString());
         return "PcapHeader{" +
                 "iMagic="+this.getiMagic() +
                 ", iMaVersion="+this.getiMaVersion() +
