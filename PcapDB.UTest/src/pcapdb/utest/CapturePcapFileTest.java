@@ -12,7 +12,7 @@ import pcapdb.core.packet.PcapHeader;
 
 public class CapturePcapFileTest {
 
-    protected final static Logger logger = LoggerFactory.getLogger(CapturePcapFile.class.getName());
+    final static Logger logger = LoggerFactory.getLogger(CapturePcapFile.class.getName());
 
     public static void main(String[] args) {
         MappedByteBufferLocater mappedByteBufferLocater = CapturePcapFile.OpenFile("PcapDB.UTest/Pcaps/drda_db2_sample.cap");

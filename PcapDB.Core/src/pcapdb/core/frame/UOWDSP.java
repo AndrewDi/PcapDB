@@ -9,7 +9,7 @@ public enum  UOWDSP {
 
     private int value;
 
-    private UOWDSP(int _value){
+    UOWDSP(int _value){
         this.value = _value;
     }
 

@@ -6,7 +6,6 @@ import pcapdb.core.buffer.MappedByteBufferLocater;
 import pcapdb.core.frame.LinkType;
 import pcapdb.core.frame.PcapHeaderFrame;
 
-import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 public class PcapHeader extends AbstractPacket{

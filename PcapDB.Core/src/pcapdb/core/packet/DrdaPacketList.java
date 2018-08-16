@@ -35,15 +35,13 @@ public class DrdaPacketList extends AbstractPacket {
         drdaPacketTotalLength = ((TcpPacket)this.parent).getPayloadLength();
         int drdaOffset = 0;
         int drdaPacketLength;
-        while(true){
-            if(drdaOffset>=drdaPacketTotalLength)
-                break;
+        while (drdaOffset < drdaPacketTotalLength) {
             drdaPacketLength = this.mappedByteBufferLocater.getShort(drdaOffset, ByteOrder.LITTLE_ENDIAN);
-            MappedByteBufferLocater drdaMappedByteBufferLocater = new MappedByteBufferLocater(this.mappedByteBufferLocater,this.mappedByteBufferLocater.getBaseOffset()+drdaOffset);
+            MappedByteBufferLocater drdaMappedByteBufferLocater = new MappedByteBufferLocater(this.mappedByteBufferLocater, this.mappedByteBufferLocater.getBaseOffset() + drdaOffset);
             drdaMappedByteBufferLocater.setLength(drdaPacketLength);
-            DrdaPacket drdaPacket = new DrdaPacket(drdaMappedByteBufferLocater,this);
+            DrdaPacket drdaPacket = new DrdaPacket(drdaMappedByteBufferLocater, this);
             this.drdaPacketList.add(drdaPacket);
-            drdaOffset+=drdaPacketLength;
+            drdaOffset += drdaPacketLength;
         }
         logger.debug("Discover {} DrdaPacket",drdaPacketList.size());
     }

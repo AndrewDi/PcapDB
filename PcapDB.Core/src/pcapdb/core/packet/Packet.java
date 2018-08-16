@@ -4,12 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pcapdb.core.buffer.MappedByteBufferLocater;
 import pcapdb.core.frame.PacketFrame;
-import pcapdb.core.frame.PcapHeaderFrame;
 
-import java.nio.ByteOrder;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.Date;
 
 public class Packet extends AbstractPacket {
     protected final Logger logger = LoggerFactory.getLogger(this.getClass().getName());

@@ -16,7 +16,7 @@ import java.nio.channels.FileChannel;
  */
 public class CapturePcapFile {
 
-    protected final static Logger logger = LoggerFactory.getLogger(CapturePcapFile.class.getName());
+    final static Logger logger = LoggerFactory.getLogger(CapturePcapFile.class.getName());
 
     /**
      * Open file with MappedByteBuffer
@@ -30,8 +30,7 @@ public class CapturePcapFile {
             FileChannel fileChannel = randomAccessFile.getChannel();
             long fileSize = fileChannel.size();
             MappedByteBuffer mappedByteBuffer = fileChannel.map(FileChannel.MapMode.READ_ONLY,0,fileSize);
-            MappedByteBufferLocater mappedByteBufferLocater = new MappedByteBufferLocater(mappedByteBuffer,0);
-            return mappedByteBufferLocater;
+            return new MappedByteBufferLocater(mappedByteBuffer,0);
         }
         catch (IOException ex){
             logger.error(ex.getLocalizedMessage());
