@@ -1,5 +1,9 @@
 package pcapdb.core.engine;
 
+import org.jnetpcap.Pcap;
+import org.jnetpcap.PcapDumper;
+import org.jnetpcap.packet.PcapPacket;
+import org.jnetpcap.packet.PcapPacketHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pcapdb.core.buffer.MappedByteBufferLocater;
@@ -36,5 +40,19 @@ public class CapturePcapFile {
             logger.error(ex.getLocalizedMessage());
             return null;
         }
+    }
+
+    public static Pcap PcapOpenFile(String path){
+        StringBuilder errbuf = new StringBuilder();
+        Pcap pcap = Pcap.openOffline(path,errbuf);
+        if(pcap==null){
+            logger.error("Error while opening device for capture: {}",errbuf.toString());
+            return null;
+        }
+
+        PacketBus packetBus = new PacketBus();
+        PcapDBPacketHandler<PacketBus> packetBusPcapDBPacketHandler = new PcapDBPacketHandler<>();
+        pcap.loop(Pcap.LOOP_INFINITE,packetBusPcapDBPacketHandler,packetBus);
+        return pcap;
     }
 }
