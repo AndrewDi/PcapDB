@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import pcapdb.core.frame.DrdaCodePointType;
 import pcapdb.core.packet.*;
 
+import java.time.Duration;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class PacketThread implements Runnable {
@@ -14,6 +15,7 @@ public class PacketThread implements Runnable {
     private String packetKey;
     private ConcurrentLinkedQueue<Packet> packetsQueue;
 
+    private int transactionID=0;
 
     private boolean isTransactionStart = false;
     private boolean isConnectionStart = false;
@@ -56,6 +58,8 @@ public class PacketThread implements Runnable {
                     sb.append("|");
                     sb.append(packet.getFullArrivalTime().toString());
                     sb.append("|");
+                    sb.append(Duration.between(statingPacket.getFullArrivalTime(),packet.getFullArrivalTime()).toMillis());
+                    sb.append("|");
                     sb.append(statingDrdaPacket.getDrdaDDMParameters().get(DrdaCodePointType.RDBNAM).getData());
                     sb.append("|");
                     sb.append(statingDrdaPacket.getDrdaDDMParameters().get(DrdaCodePointType.USRID).getData());
@@ -71,6 +75,8 @@ public class PacketThread implements Runnable {
                     }
                     logger.debug(sb.toString());
                 }
+
+                logger.debug(drdaPacketList.getDDMListString());
             }
             //if not drda packet,do nothing
         }

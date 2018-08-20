@@ -9,6 +9,7 @@ import pcapdb.core.frame.SVRCODLevel;
 import pcapdb.core.frame.UOWDSP;
 
 import java.nio.ByteOrder;
+import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -17,14 +18,14 @@ public class DrdaPacket extends AbstractPacket {
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
-    private LinkedHashMap<DrdaCodePointType,DrdaDDMParameter> drdaDDMParameters;
+    private IdentityHashMap<DrdaCodePointType,DrdaDDMParameter> drdaDDMParameters;
 
     public DrdaPacket(ByteBufferLocater byteBufferLocater, AbstractPacket abstractPacket) {
         super(byteBufferLocater, abstractPacket);
     }
 
-    public LinkedHashMap<DrdaCodePointType,DrdaDDMParameter> getDrdaDDMParameters() {
-        if (this.drdaDDMParameters == null) this.drdaDDMParameters = new LinkedHashMap<>();
+    public IdentityHashMap<DrdaCodePointType,DrdaDDMParameter> getDrdaDDMParameters() {
+        if (this.drdaDDMParameters == null) this.drdaDDMParameters = new IdentityHashMap<>();
         if (this.drdaDDMParameters.size() > 0) return this.drdaDDMParameters;
 
         int offset = DrdaFrame.totalLength;
