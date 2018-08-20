@@ -24,5 +24,10 @@
             <artifactId>jnetpcap</artifactId>
             <version>1.4.r1425-1g</version>
         </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>26.0-jre</version>
+        </dependency>
     </dependencies>
 </project>

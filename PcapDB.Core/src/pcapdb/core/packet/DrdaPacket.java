@@ -1,5 +1,7 @@
 package pcapdb.core.packet;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ListMultimap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pcapdb.core.buffer.ByteBufferLocater;
@@ -18,14 +20,14 @@ public class DrdaPacket extends AbstractPacket {
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
-    private IdentityHashMap<DrdaCodePointType,DrdaDDMParameter> drdaDDMParameters;
+    private ListMultimap<DrdaCodePointType,DrdaDDMParameter> drdaDDMParameters;
 
     public DrdaPacket(ByteBufferLocater byteBufferLocater, AbstractPacket abstractPacket) {
         super(byteBufferLocater, abstractPacket);
     }
 
-    public IdentityHashMap<DrdaCodePointType,DrdaDDMParameter> getDrdaDDMParameters() {
-        if (this.drdaDDMParameters == null) this.drdaDDMParameters = new IdentityHashMap<>();
+    public ListMultimap<DrdaCodePointType,DrdaDDMParameter> getDrdaDDMParameters() {
+        if (this.drdaDDMParameters == null) this.drdaDDMParameters = ArrayListMultimap.create();
         if (this.drdaDDMParameters.size() > 0) return this.drdaDDMParameters;
 
         int offset = DrdaFrame.totalLength;

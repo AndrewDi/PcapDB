@@ -60,14 +60,14 @@ public class PacketThread implements Runnable {
                     sb.append("|");
                     sb.append(Duration.between(statingPacket.getFullArrivalTime(),packet.getFullArrivalTime()).toMillis());
                     sb.append("|");
-                    sb.append(statingDrdaPacket.getDrdaDDMParameters().get(DrdaCodePointType.RDBNAM).getData());
+                    sb.append(statingDrdaPacket.getDrdaDDMParameters().get(DrdaCodePointType.RDBNAM).get(0).getData());
                     sb.append("|");
-                    sb.append(statingDrdaPacket.getDrdaDDMParameters().get(DrdaCodePointType.USRID).getData());
+                    sb.append(statingDrdaPacket.getDrdaDDMParameters().get(DrdaCodePointType.USRID).get(0).getData());
                     sb.append("|");
                     if(drdaPacketList.getDrdaPacketList().containsKey(DrdaCodePointType.SQLCARD)){
                         DrdaPacket sqlcardDrdaPacket = drdaPacketList.getDrdaPacketList().get(DrdaCodePointType.SQLCARD);
                         if(sqlcardDrdaPacket.getDrdaDDMParameters().size()>0){
-                            SQLResult sqlResult = (SQLResult)sqlcardDrdaPacket.getDrdaDDMParameters().get(DrdaCodePointType.SQLCARD).getData();
+                            SQLResult sqlResult = (SQLResult)sqlcardDrdaPacket.getDrdaDDMParameters().get(DrdaCodePointType.SQLCARD).get(0).getData();
                             sb.append(sqlResult.getSqlCode());
                             sb.append("|");
                             sb.append(sqlResult.getSqlState());
