@@ -1,5 +1,6 @@
 package pcapdb.utest;
 
+import org.jnetpcap.Pcap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pcapdb.core.buffer.MappedByteBufferLocater;
@@ -15,6 +16,7 @@ public class LargePcapFileTest {
     protected final static Logger logger = LoggerFactory.getLogger(LargePcapFileTest.class.getName());
 
     public static void main(String[] args) {
+        /**
         MappedByteBufferLocater mappedByteBufferLocater = CapturePcapFile.OpenFile("/home/andrew/Developer/pcap4j/Dump10");
         AbstractPacket pcapHeader = new PcapHeader(mappedByteBufferLocater);
         logger.info(pcapHeader.toString());
@@ -30,5 +32,11 @@ public class LargePcapFileTest {
         }
         LocalDateTime endTime = LocalDateTime.now();
         logger.info("Process {} packges in {} seconds",i, Duration.between(startTime,endTime).getSeconds());
+         **/
+        LocalDateTime startTime = LocalDateTime.now();
+        String file = "/home/andrew/Developer/pcap4j/Dump10";
+        Pcap pcap = CapturePcapFile.PcapOpenFile(file);
+        LocalDateTime endTime = LocalDateTime.now();
+        logger.info("Process in {} milliseconds", Duration.between(startTime,endTime).toMillis());
     }
 }

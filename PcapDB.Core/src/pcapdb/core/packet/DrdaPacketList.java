@@ -2,48 +2,60 @@ package pcapdb.core.packet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pcapdb.core.buffer.ByteBufferLocater;
 import pcapdb.core.buffer.MappedByteBufferLocater;
+import pcapdb.core.frame.DrdaCodePointType;
 
 import java.nio.ByteOrder;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 
 public class DrdaPacketList extends AbstractPacket {
 
-    private List<DrdaPacket> drdaPacketList;
+    private LinkedHashMap<DrdaCodePointType,DrdaPacket> drdaPacketList;
     private int drdaPacketTotalLength;
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
-    public DrdaPacketList(MappedByteBufferLocater mappedByteBufferLocater, AbstractPacket abstractPacket) {
-        super(mappedByteBufferLocater, abstractPacket);
+    public DrdaPacketList(ByteBufferLocater byteBufferLocater, AbstractPacket abstractPacket) {
+        super(byteBufferLocater, abstractPacket);
         this.decoder();
     }
 
-    public List<DrdaPacket> getDrdaPacketList() {
+    public LinkedHashMap<DrdaCodePointType,DrdaPacket> getDrdaPacketList() {
         return drdaPacketList;
     }
 
     @Override
-    public MappedByteBufferLocater getPayload() {
+    public ByteBufferLocater getPayload() {
         return null;
     }
 
 
     private void decoder(){
-        drdaPacketList = new LinkedList<>();
+        drdaPacketList = new LinkedHashMap<>();
         drdaPacketTotalLength = ((TcpPacket)this.parent).getPayloadLength();
         int drdaOffset = 0;
         int drdaPacketLength;
         while (drdaOffset < drdaPacketTotalLength) {
-            drdaPacketLength = this.mappedByteBufferLocater.getShort(drdaOffset, ByteOrder.LITTLE_ENDIAN);
-            MappedByteBufferLocater drdaMappedByteBufferLocater = new MappedByteBufferLocater(this.mappedByteBufferLocater, this.mappedByteBufferLocater.getBaseOffset() + drdaOffset);
+            drdaPacketLength = this.byteBufferLocater.getShort(drdaOffset, ByteOrder.LITTLE_ENDIAN);
+            ByteBufferLocater drdaMappedByteBufferLocater = new ByteBufferLocater(this.byteBufferLocater, this.byteBufferLocater.getBaseOffset() + drdaOffset);
             drdaMappedByteBufferLocater.setLength(drdaPacketLength);
             DrdaPacket drdaPacket = new DrdaPacket(drdaMappedByteBufferLocater, this);
-            this.drdaPacketList.add(drdaPacket);
+            this.drdaPacketList.put(drdaPacket.getDDMCodePoint(),drdaPacket);
             drdaOffset += drdaPacketLength;
         }
-        logger.debug("Discover {} DrdaPacket",drdaPacketList.size());
+    }
+
+
+    public String getDDMListString(){
+        StringBuilder stringBuilder = new StringBuilder();
+        this.drdaPacketList.forEach((drdaCodePointType, drdaPacket) -> {
+            stringBuilder.append(drdaCodePointType);
+            stringBuilder.append("|");
+        });
+        return stringBuilder.toString();
     }
 
     @Override

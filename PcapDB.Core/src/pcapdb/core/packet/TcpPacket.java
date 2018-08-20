@@ -2,6 +2,7 @@ package pcapdb.core.packet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pcapdb.core.buffer.ByteBufferLocater;
 import pcapdb.core.buffer.MappedByteBufferLocater;
 import pcapdb.core.frame.TcpFrame;
 
@@ -35,30 +36,40 @@ public class TcpPacket extends AbstractPacket {
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
-    public TcpPacket(MappedByteBufferLocater mappedByteBufferLocater, AbstractPacket abstractPacket) {
-        super(mappedByteBufferLocater, abstractPacket);
+    public TcpPacket(ByteBufferLocater byteBufferLocater, AbstractPacket abstractPacket) {
+        super(byteBufferLocater, abstractPacket);
     }
 
     public int HeaderMinimumLength = 20;
 
+    public String getKey(){
+        Ipv4Packet ipv4Packet = (Ipv4Packet)this.getParent();
+        return String.format("%s|%d|%s|%d",ipv4Packet.getSource().getHostAddress(),this.getSourcePort(),ipv4Packet.getDestination().getHostAddress(),this.getDestinationPort());
+    }
+
+    public String getReversalKey(){
+        Ipv4Packet ipv4Packet = (Ipv4Packet)this.getParent();
+        return String.format("%s|%d|%s|%d",ipv4Packet.getDestination().getHostAddress(),this.getDestinationPort(),ipv4Packet.getSource().getHostAddress(),this.getSourcePort());
+    }
+
     public int getSourcePort(){
-        return this.mappedByteBufferLocater.getShort(TcpFrame.SourcePortPosition, ByteOrder.LITTLE_ENDIAN);
+        return this.byteBufferLocater.getShort(TcpFrame.SourcePortPosition, ByteOrder.LITTLE_ENDIAN);
     }
 
     public int getDestinationPort(){
-        return this.mappedByteBufferLocater.getShort(TcpFrame.DestinationPortPosition, ByteOrder.LITTLE_ENDIAN);
+        return this.byteBufferLocater.getShort(TcpFrame.DestinationPortPosition, ByteOrder.LITTLE_ENDIAN);
     }
 
     public long getSequenceNumber(){
-        return this.mappedByteBufferLocater.getUnsignedInt(TcpFrame.SequenceNumberPosition,ByteOrder.LITTLE_ENDIAN);
+        return this.byteBufferLocater.getUnsignedInt(TcpFrame.SequenceNumberPosition,ByteOrder.LITTLE_ENDIAN);
     }
 
     public long getAcknowledgmentNumber(){
-        return this.mappedByteBufferLocater.getUnsignedInt(TcpFrame.AckNumberPosition,ByteOrder.LITTLE_ENDIAN);
+        return this.byteBufferLocater.getUnsignedInt(TcpFrame.AckNumberPosition,ByteOrder.LITTLE_ENDIAN);
     }
 
     public int getDataOffsetAndFlags(){
-        return this.mappedByteBufferLocater.getShort(TcpFrame.DataOffsetAndFlagsPosition,ByteOrder.LITTLE_ENDIAN);
+        return this.byteBufferLocater.getShort(TcpFrame.DataOffsetAndFlagsPosition,ByteOrder.LITTLE_ENDIAN);
     }
 
     public int getDataOffset(){
@@ -66,11 +77,11 @@ public class TcpPacket extends AbstractPacket {
     }
 
     public int getWindowSize(){
-        return this.mappedByteBufferLocater.getShort(TcpFrame.WindowSizePosition,ByteOrder.LITTLE_ENDIAN);
+        return this.byteBufferLocater.getShort(TcpFrame.WindowSizePosition,ByteOrder.LITTLE_ENDIAN);
     }
 
     public int getChecksum(){
-        return this.mappedByteBufferLocater.getShort(TcpFrame.ChecksumPosition,ByteOrder.LITTLE_ENDIAN);
+        return this.byteBufferLocater.getShort(TcpFrame.ChecksumPosition,ByteOrder.LITTLE_ENDIAN);
     }
 
     public boolean getValidChecksum(){
@@ -122,15 +133,15 @@ public class TcpPacket extends AbstractPacket {
     }
 
     @Override
-    public MappedByteBufferLocater getPayload() {
-        return new MappedByteBufferLocater(this.mappedByteBufferLocater,this.mappedByteBufferLocater.getBaseOffset()+this.getHeaderLength());
+    public ByteBufferLocater getPayload() {
+        return new ByteBufferLocater(this.byteBufferLocater,this.byteBufferLocater.getBaseOffset()+this.getHeaderLength());
     }
 
     public AbstractPacket Decoder() {
         if(this.getPayloadLength()<4){
             return null;
         }
-        MappedByteBufferLocater payloadMappedByteBufferLocater = this.getPayload();
+        ByteBufferLocater payloadMappedByteBufferLocater = this.getPayload();
         int drdaLength = payloadMappedByteBufferLocater.getShort(0,ByteOrder.LITTLE_ENDIAN);
         if(this.getPayloadLength()<drdaLength)
             return null;
@@ -141,7 +152,7 @@ public class TcpPacket extends AbstractPacket {
             //logger.debug(drdaPacketList.toString());
             return drdaPacketList;
         }
-        return null;
+        return this;
     }
 
     public int getPayloadLength(){

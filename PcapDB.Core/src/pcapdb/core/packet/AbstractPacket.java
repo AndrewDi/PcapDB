@@ -1,5 +1,6 @@
 package pcapdb.core.packet;
 
+import pcapdb.core.buffer.ByteBufferLocater;
 import pcapdb.core.buffer.MappedByteBufferLocater;
 
 /**
@@ -8,7 +9,7 @@ import pcapdb.core.buffer.MappedByteBufferLocater;
  * @author PanDi(anonymous-oss@outlook.com)
  */
 public abstract class AbstractPacket {
-    MappedByteBufferLocater mappedByteBufferLocater;
+    ByteBufferLocater byteBufferLocater;
 
     AbstractPacket parent =null;
 
@@ -16,15 +17,17 @@ public abstract class AbstractPacket {
         return parent;
     }
 
-    AbstractPacket(MappedByteBufferLocater mappedByteBufferLocater, AbstractPacket abstractPacket){
-        this.mappedByteBufferLocater=mappedByteBufferLocater;
+    AbstractPacket(){}
+
+    AbstractPacket(ByteBufferLocater byteBufferLocater, AbstractPacket abstractPacket){
+        this.byteBufferLocater = byteBufferLocater;
         this.parent = abstractPacket;
     }
 
-    AbstractPacket(MappedByteBufferLocater mappedByteBufferLocater){
-        this.mappedByteBufferLocater=mappedByteBufferLocater;
+    AbstractPacket(ByteBufferLocater byteBufferLocater){
+        this.byteBufferLocater = byteBufferLocater;
     }
 
-    public abstract MappedByteBufferLocater getPayload();
+    public abstract ByteBufferLocater getPayload();
 
 }

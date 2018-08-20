@@ -2,6 +2,7 @@ package pcapdb.core.packet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pcapdb.core.buffer.ByteBufferLocater;
 import pcapdb.core.buffer.MappedByteBufferLocater;
 import pcapdb.core.frame.IPv4Frame;
 
@@ -33,13 +34,13 @@ public class Ipv4Packet extends AbstractPacket {
      *    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
      */
 
-    public Ipv4Packet(MappedByteBufferLocater mappedByteBufferLocater,AbstractPacket abstractPacket) {
-        super(mappedByteBufferLocater,abstractPacket);
+    public Ipv4Packet(ByteBufferLocater byteBufferLocater, AbstractPacket abstractPacket) {
+        super(byteBufferLocater,abstractPacket);
     }
 
     @Override
-    public MappedByteBufferLocater getPayload() {
-        return new MappedByteBufferLocater(this.mappedByteBufferLocater,this.mappedByteBufferLocater.getBaseOffset()+this.getHeaderLength());
+    public ByteBufferLocater getPayload() {
+        return new ByteBufferLocater(this.byteBufferLocater,this.byteBufferLocater.getBaseOffset()+this.getHeaderLength());
     }
 
     public AbstractPacket Decoder(){
@@ -56,44 +57,44 @@ public class Ipv4Packet extends AbstractPacket {
     }
 
     public int getVersion(){
-        return this.mappedByteBufferLocater.getByte(IPv4Frame.VersionAndHeaderLengthPosition) >>4 & 0x0F;
+        return this.byteBufferLocater.getByte(IPv4Frame.VersionAndHeaderLengthPosition) >>4 & 0x0F;
     }
 
     public int getHeaderLength(){
-        return (this.mappedByteBufferLocater.getByte(IPv4Frame.VersionAndHeaderLengthPosition) & 0x0F)*4;
+        return (this.byteBufferLocater.getByte(IPv4Frame.VersionAndHeaderLengthPosition) & 0x0F)*4;
     }
 
     public byte getDifferentiatedServices(){
-        return this.mappedByteBufferLocater.getByte(IPv4Frame.DifferentiatedServicesPosition);
+        return this.byteBufferLocater.getByte(IPv4Frame.DifferentiatedServicesPosition);
     }
 
     public int getTotalLength(){
-        return this.mappedByteBufferLocater.getShort(IPv4Frame.TotalLengthPosition,ByteOrder.LITTLE_ENDIAN);
+        return this.byteBufferLocater.getShort(IPv4Frame.TotalLengthPosition,ByteOrder.LITTLE_ENDIAN);
     }
 
     public int getId(){
-        return this.mappedByteBufferLocater.getShort(IPv4Frame.IdPosition,ByteOrder.LITTLE_ENDIAN);
+        return this.byteBufferLocater.getShort(IPv4Frame.IdPosition,ByteOrder.LITTLE_ENDIAN);
     }
 
     public String getFragmentOffsetAndFlags(){
-        return this.mappedByteBufferLocater.getByteString(IPv4Frame.FragmentOffsetAndFlagsPosition,IPv4Frame.FragmentOffsetAndFlagsLength, ByteOrder.BIG_ENDIAN);
+        return this.byteBufferLocater.getByteString(IPv4Frame.FragmentOffsetAndFlagsPosition,IPv4Frame.FragmentOffsetAndFlagsLength, ByteOrder.BIG_ENDIAN);
     }
 
     public int getTtL(){
-        return this.mappedByteBufferLocater.getSingle(IPv4Frame.TtlPosition);
+        return this.byteBufferLocater.getSingle(IPv4Frame.TtlPosition);
     }
 
     public int getProtocol(){
-        return this.mappedByteBufferLocater.getSingle(IPv4Frame.ProtocolPosition);
+        return this.byteBufferLocater.getSingle(IPv4Frame.ProtocolPosition);
     }
 
     public String getChecksum(){
-        return this.mappedByteBufferLocater.getByteString(IPv4Frame.ChecksumPosition,IPv4Frame.ChecksumLength,ByteOrder.LITTLE_ENDIAN);
+        return this.byteBufferLocater.getByteString(IPv4Frame.ChecksumPosition,IPv4Frame.ChecksumLength,ByteOrder.LITTLE_ENDIAN);
     }
 
     public InetAddress getSource(){
         try {
-            return Inet4Address.getByAddress(this.mappedByteBufferLocater.getBytes(IPv4Frame.SourcePosition,IPv4Frame.AddressLength));
+            return Inet4Address.getByAddress(this.byteBufferLocater.getBytes(IPv4Frame.SourcePosition,IPv4Frame.AddressLength));
         } catch (UnknownHostException e) {
             logger.error(e.getLocalizedMessage());
         }
@@ -102,7 +103,7 @@ public class Ipv4Packet extends AbstractPacket {
 
     public InetAddress getDestination(){
         try {
-            return Inet4Address.getByAddress(this.mappedByteBufferLocater.getBytes(IPv4Frame.DestinationPosition,IPv4Frame.AddressLength));
+            return Inet4Address.getByAddress(this.byteBufferLocater.getBytes(IPv4Frame.DestinationPosition,IPv4Frame.AddressLength));
         } catch (UnknownHostException e) {
             logger.error(e.getLocalizedMessage());
         }

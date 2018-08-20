@@ -2,30 +2,47 @@ package pcapdb.core.packet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pcapdb.core.buffer.ByteBufferLocater;
 import pcapdb.core.buffer.MappedByteBufferLocater;
 import pcapdb.core.frame.PacketFrame;
 
+import java.nio.ByteBuffer;
+import java.nio.MappedByteBuffer;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
 public class Packet extends AbstractPacket {
     protected final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
-    public Packet(MappedByteBufferLocater mappedByteBufferLocater) {
+    private Long GMTTime=null;
+    private Integer MicroTime = null;
+    private Integer CapLen = null;
+    private Integer Len = null;
+
+    public Packet(ByteBufferLocater mappedByteBufferLocater) {
         super(mappedByteBufferLocater);
     }
 
+    public Packet(ByteBuffer byteBuffer,long gmtTime,int microTime,int capLen,int len){
+        this(new ByteBufferLocater(byteBuffer,0));
+        this.GMTTime = gmtTime;
+        this.MicroTime = microTime;
+        this.CapLen = capLen;
+        this.Len = len;
+    }
+
     @Override
-    public MappedByteBufferLocater getPayload() {
-        return new MappedByteBufferLocater(this.mappedByteBufferLocater,this.mappedByteBufferLocater.getBaseOffset()+PacketFrame.totalLength);
+    public ByteBufferLocater getPayload() {
+        return this.GMTTime == null ? new ByteBufferLocater(this.byteBufferLocater,this.byteBufferLocater.getBaseOffset()+PacketFrame.totalLength):
+                new ByteBufferLocater(this.byteBufferLocater,this.byteBufferLocater.getBaseOffset());
     }
 
     public long getGMTtime(){
-         return this.mappedByteBufferLocater.getUnsignedInt(PacketFrame.GMTTimePosition);
+        return this.GMTTime == null ?  this.byteBufferLocater.getUnsignedInt(PacketFrame.GMTTimePosition):this.GMTTime;
     }
 
     public int getMicroTime(){
-        return this.mappedByteBufferLocater.getInt(PacketFrame.MicroTimePosition);
+        return this.MicroTime == null ? this.byteBufferLocater.getInt(PacketFrame.MicroTimePosition):this.MicroTime;
     }
 
     public LocalDateTime getFullArrivalTime(){
@@ -33,18 +50,18 @@ public class Packet extends AbstractPacket {
     }
 
     public int getCapLen(){
-        return this.mappedByteBufferLocater.getInt(PacketFrame.CapLenPosition);
+        return this.CapLen == null? this.byteBufferLocater.getInt(PacketFrame.CapLenPosition):this.CapLen;
     }
 
     public int getLen(){
-        return this.mappedByteBufferLocater.getInt(PacketFrame.LenPosition);
+        return this.Len == null ? this.byteBufferLocater.getInt(PacketFrame.LenPosition):this.Len;
     }
 
-    public MappedByteBufferLocater getNextPacket(){
+    public ByteBufferLocater getNextPacket(){
 
         //Every packet has 16 bytes
-        int nextIndex = this.mappedByteBufferLocater.getBaseOffset()+this.getCapLen()+16;
-        return new MappedByteBufferLocater(this.mappedByteBufferLocater,nextIndex);
+        int nextIndex = this.byteBufferLocater.getBaseOffset()+this.getCapLen()+16;
+        return new ByteBufferLocater(this.byteBufferLocater,nextIndex);
     }
 
     public AbstractPacket Decoder(){

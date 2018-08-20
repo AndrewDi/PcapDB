@@ -31,6 +31,5 @@ public class CapturePcapFileTest {
          **/
         String file = "PcapDB.UTest/Pcaps/drda_db2_sample.cap";
         Pcap pcap = CapturePcapFile.PcapOpenFile(file);
-        pcap.close();
     }
 }

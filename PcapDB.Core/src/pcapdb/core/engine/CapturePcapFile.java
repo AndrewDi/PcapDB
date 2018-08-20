@@ -51,8 +51,14 @@ public class CapturePcapFile {
         }
 
         PacketBus packetBus = new PacketBus();
-        PcapDBPacketHandler<PacketBus> packetBusPcapDBPacketHandler = new PcapDBPacketHandler<>();
-        pcap.loop(Pcap.LOOP_INFINITE,packetBusPcapDBPacketHandler,packetBus);
+        PcapDBPacketHandler packetBusPcapDBPacketHandler = new PcapDBPacketHandler();
+        try {
+            pcap.loop(Pcap.LOOP_INFINITE,packetBusPcapDBPacketHandler,packetBus);
+        }
+        finally {
+            pcap.close();
+            //packetBus.stop();
+        }
         return pcap;
     }
 }
