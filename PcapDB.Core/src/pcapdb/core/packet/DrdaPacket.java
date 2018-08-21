@@ -5,10 +5,7 @@ import com.google.common.collect.ListMultimap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pcapdb.core.buffer.ByteBufferLocater;
-import pcapdb.core.frame.DrdaCodePointType;
-import pcapdb.core.frame.DrdaFrame;
-import pcapdb.core.frame.SVRCODLevel;
-import pcapdb.core.frame.UOWDSP;
+import pcapdb.core.frame.*;
 
 import java.nio.ByteOrder;
 import java.util.IdentityHashMap;
@@ -53,7 +50,7 @@ public class DrdaPacket extends AbstractPacket {
             return this.drdaDDMParameters;
         }
 
-        while (offset < drdaPacketLength - DrdaFrame.totalLength) {
+        while (offset < drdaPacketLength) {
             int length = this.byteBufferLocater.getShort(offset, ByteOrder.LITTLE_ENDIAN);
             DrdaCodePointType drdaCodePointType = DrdaCodePointType.valueOf(this.byteBufferLocater.getShort(offset + DrdaFrame.DDMLengthLength, ByteOrder.LITTLE_ENDIAN));
             if (length == 0 || getDDMCodePoint() == DrdaCodePointType.SQLSTT || getDDMCodePoint() == DrdaCodePointType.QRYDTA ||
@@ -102,6 +99,9 @@ public class DrdaPacket extends AbstractPacket {
                     break;
                 case SVRCOD:
                     drdaDDMParameter.setData(SVRCODLevel.valueOf(this.byteBufferLocater.getShort(startIndex, ByteOrder.LITTLE_ENDIAN)));
+                    break;
+                case SECCHKCD:
+                    drdaDDMParameter.setData(SECCHKCDReson.ValueOf(this.byteBufferLocater.getByte(startIndex)));
                     break;
                 case UOWDSP:
                     drdaDDMParameter.setData(UOWDSP.valueOf(this.byteBufferLocater.getByte(startIndex)));

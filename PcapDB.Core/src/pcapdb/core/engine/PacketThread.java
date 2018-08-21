@@ -40,7 +40,7 @@ public class PacketThread implements Runnable {
                 //Connection decoding reassembly
                 if(drdaPacketList.getDrdaPacketList().containsKey(DrdaCodePointType.SECCHK)&&!isConnectionStart){
                     isConnectionStart = true;
-                    this.statingDrdaPacket = drdaPacketList.getDrdaPacketList().get(DrdaCodePointType.SECCHK);
+                    this.statingDrdaPacket = drdaPacketList.getDrdaPacketList().get(DrdaCodePointType.SECCHK).get(0);
                 }
                 else if (isConnectionStart&&drdaPacketList.getDrdaPacketList().containsKey(DrdaCodePointType.SECCHKRM)&&this.statingDrdaPacket!=null){
                     isConnectionStart = false;
@@ -50,7 +50,7 @@ public class PacketThread implements Runnable {
                     Ipv4Packet statingIpv4Packet = (Ipv4Packet) statingTcpPacket.getParent();
                     EthernetPacket statingEthernetPacket = (EthernetPacket)statingIpv4Packet.getParent();
                     Packet statingPacket = (Packet)statingEthernetPacket.getParent();
-                    sb.append("Connect|");
+                    sb.append("CONNECT|");
 
                     sb.append(statingTcpPacket.getKey());
                     sb.append("|");
@@ -64,6 +64,11 @@ public class PacketThread implements Runnable {
                     sb.append("|");
                     sb.append(statingDrdaPacket.getDrdaDDMParameters().get(DrdaCodePointType.USRID).get(0).getData());
                     sb.append("|");
+                    DrdaPacket secchkrmPacket = drdaPacketList.getDrdaPacketList().get(DrdaCodePointType.SECCHKRM).get(0);
+                    sb.append(secchkrmPacket.getDrdaDDMParameters().get(DrdaCodePointType.SVRCOD).get(0).getData());
+                    sb.append("|");
+                    sb.append(secchkrmPacket.getDrdaDDMParameters().get(DrdaCodePointType.SECCHKCD).get(0).getData());
+                    /**
                     if(drdaPacketList.getDrdaPacketList().containsKey(DrdaCodePointType.SQLCARD)){
                         DrdaPacket sqlcardDrdaPacket = drdaPacketList.getDrdaPacketList().get(DrdaCodePointType.SQLCARD);
                         if(sqlcardDrdaPacket.getDrdaDDMParameters().size()>0){
@@ -73,10 +78,11 @@ public class PacketThread implements Runnable {
                             sb.append(sqlResult.getSqlState());
                         }
                     }
+                     **/
                     logger.debug(sb.toString());
                 }
 
-                logger.debug(drdaPacketList.getDDMListString());
+                //logger.debug(drdaPacketList.getDDMListString());
             }
             //if not drda packet,do nothing
         }

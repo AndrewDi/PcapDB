@@ -1,5 +1,7 @@
 package pcapdb.core.packet;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ListMultimap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pcapdb.core.buffer.ByteBufferLocater;
@@ -13,7 +15,7 @@ import java.util.List;
 
 public class DrdaPacketList extends AbstractPacket {
 
-    private LinkedHashMap<DrdaCodePointType,DrdaPacket> drdaPacketList;
+    private ListMultimap<DrdaCodePointType,DrdaPacket> drdaPacketList;
     private int drdaPacketTotalLength;
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
@@ -23,7 +25,7 @@ public class DrdaPacketList extends AbstractPacket {
         this.decoder();
     }
 
-    public LinkedHashMap<DrdaCodePointType,DrdaPacket> getDrdaPacketList() {
+    public ListMultimap<DrdaCodePointType,DrdaPacket> getDrdaPacketList() {
         return drdaPacketList;
     }
 
@@ -34,7 +36,7 @@ public class DrdaPacketList extends AbstractPacket {
 
 
     private void decoder(){
-        drdaPacketList = new LinkedHashMap<>();
+        drdaPacketList = ArrayListMultimap.create();
         drdaPacketTotalLength = ((TcpPacket)this.parent).getPayloadLength();
         int drdaOffset = 0;
         int drdaPacketLength;
