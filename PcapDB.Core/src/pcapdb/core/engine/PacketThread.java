@@ -68,6 +68,7 @@ public class PacketThread implements Runnable {
                     sb.append(secchkrmPacket.getDrdaDDMParameters().get(DrdaCodePointType.SVRCOD).get(0).getData());
                     sb.append("|");
                     sb.append(secchkrmPacket.getDrdaDDMParameters().get(DrdaCodePointType.SECCHKCD).get(0).getData());
+                    this.statingDrdaPacket = null;
                     /**
                     if(drdaPacketList.getDrdaPacketList().containsKey(DrdaCodePointType.SQLCARD)){
                         DrdaPacket sqlcardDrdaPacket = drdaPacketList.getDrdaPacketList().get(DrdaCodePointType.SQLCARD);
@@ -81,6 +82,9 @@ public class PacketThread implements Runnable {
                      **/
                     logger.debug(sb.toString());
                 }
+
+                //Decode SELECT Statement
+
 
                 //logger.debug(drdaPacketList.getDDMListString());
             }
