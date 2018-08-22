@@ -8,10 +8,6 @@ import pcapdb.core.buffer.ByteBufferLocater;
 import pcapdb.core.frame.*;
 
 import java.nio.ByteOrder;
-import java.util.IdentityHashMap;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
 
 public class DrdaPacket extends AbstractPacket {
 
@@ -46,6 +42,13 @@ public class DrdaPacket extends AbstractPacket {
             DrdaDDMParameter drdaDDMParameter = new DrdaDDMParameter();
             drdaDDMParameter.setDrdaCodePointType(DrdaCodePointType.SQLCARD);
             drdaDDMParameter.setData(sqlResult);
+            this.drdaDDMParameters.put(DrdaCodePointType.SQLCARD,drdaDDMParameter);
+            return this.drdaDDMParameters;
+        }
+
+        if(this.getDDMCodePoint()==DrdaCodePointType.RDBCMM||this.getDDMCodePoint()==DrdaCodePointType.RDBRLLBCK){
+            DrdaDDMParameter drdaDDMParameter = new DrdaDDMParameter();
+            drdaDDMParameter.setDrdaCodePointType(this.getDDMCodePoint());
             this.drdaDDMParameters.put(DrdaCodePointType.SQLCARD,drdaDDMParameter);
             return this.drdaDDMParameters;
         }
