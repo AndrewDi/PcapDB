@@ -71,6 +71,7 @@ public class DrdaPacket extends AbstractPacket {
                 case DATA:
                 case QRYDTA:
                     strlength -= 1;
+                    startIndex+=1;
                     drdaDDMParameter.setData(this.byteBufferLocater.getUTF8String(startIndex, strlength).trim());
                     break;
                 case PRDDTA:
