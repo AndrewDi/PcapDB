@@ -54,7 +54,7 @@ public class PacketThread implements Runnable {
                     Ipv4Packet statingIpv4Packet = (Ipv4Packet) statingTcpPacket.getParent();
                     EthernetPacket statingEthernetPacket = (EthernetPacket)statingIpv4Packet.getParent();
                     Packet statingPacket = (Packet)statingEthernetPacket.getParent();
-                    sb.append(statingDrdaPacket.getDrdaDDMParameters().get(DrdaCodePointType.RDBNAM).get(0).getData());
+                    sb.append(statingDrdaPacket.getDrdaDDMParameters().get(DrdaCodePointType.RDBNAM).get(0).getData().toString().toUpperCase());
                     sb.append("|");
                     sb.append("CONNECT|");
                     sb.append(statingTcpPacket.getKey());
