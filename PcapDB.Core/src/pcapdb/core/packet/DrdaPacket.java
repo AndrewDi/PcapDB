@@ -49,7 +49,7 @@ public class DrdaPacket extends AbstractPacket {
         if(this.getDDMCodePoint()==DrdaCodePointType.RDBCMM||this.getDDMCodePoint()==DrdaCodePointType.RDBRLLBCK){
             DrdaDDMParameter drdaDDMParameter = new DrdaDDMParameter();
             drdaDDMParameter.setDrdaCodePointType(this.getDDMCodePoint());
-            this.drdaDDMParameters.put(DrdaCodePointType.SQLCARD,drdaDDMParameter);
+            this.drdaDDMParameters.put(this.getDDMCodePoint(),drdaDDMParameter);
             return this.drdaDDMParameters;
         }
 
@@ -84,7 +84,11 @@ public class DrdaPacket extends AbstractPacket {
                     break;
                 case PKGNAMCSN:
                      strlength -= 16;
-                     drdaDDMParameter.setData(this.byteBufferLocater.getEbcdicString(startIndex, strlength).trim());
+                     String data = this.byteBufferLocater.getEbcdicString(startIndex, strlength).trim();
+                     if(!data.contains("NULLID")){
+                         data = this.byteBufferLocater.getUTF8String(startIndex,strlength);
+                     }
+                     drdaDDMParameter.setData(data);
                      break;
                 case PKGSNLST:
                     strlength-=24;

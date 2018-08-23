@@ -23,6 +23,7 @@ public class PacketThread implements Runnable {
     private boolean isConnectionStart = false;
     private DrdaPacketList statingDrdaPacketList=null;
     private LocalDateTime transactionStartTime=null;
+    private String dbname=null;
 
     public PacketThread(ConcurrentLinkedQueue<Packet> packets,String packetKey){
         this.packetsQueue = packets;
@@ -53,8 +54,9 @@ public class PacketThread implements Runnable {
                     Ipv4Packet statingIpv4Packet = (Ipv4Packet) statingTcpPacket.getParent();
                     EthernetPacket statingEthernetPacket = (EthernetPacket)statingIpv4Packet.getParent();
                     Packet statingPacket = (Packet)statingEthernetPacket.getParent();
+                    sb.append(statingDrdaPacket.getDrdaDDMParameters().get(DrdaCodePointType.RDBNAM).get(0).getData());
+                    sb.append("|");
                     sb.append("CONNECT|");
-
                     sb.append(statingTcpPacket.getKey());
                     sb.append("|");
                     sb.append(statingPacket.getFullArrivalTime().toString());
@@ -62,8 +64,9 @@ public class PacketThread implements Runnable {
                     sb.append(packet.getFullArrivalTime().toString());
                     sb.append("|");
                     sb.append(Duration.between(statingPacket.getFullArrivalTime(),packet.getFullArrivalTime()).toMillis());
-                    sb.append("|");
-                    sb.append(statingDrdaPacket.getDrdaDDMParameters().get(DrdaCodePointType.RDBNAM).get(0).getData());
+
+
+                    this.dbname = statingDrdaPacket.getDrdaDDMParameters().get(DrdaCodePointType.RDBNAM).get(0).getData().toString().toUpperCase();
                     sb.append("|");
                     sb.append(statingDrdaPacket.getDrdaDDMParameters().get(DrdaCodePointType.USRID).get(0).getData());
                     sb.append("|");
@@ -84,7 +87,19 @@ public class PacketThread implements Runnable {
                     //Mark Transaction Start
                     this.isTransactionStart=true;
                     this.statingDrdaPacketList = drdaPacketList;
+                    //Set dbname
+                    if(this.dbname==null){
+                        if(drdaPacketList.getDrdaPacketList().containsKey(DrdaCodePointType.EXCSQLSET)){
+                            this.dbname = drdaPacketList.getDrdaPacketList().get(DrdaCodePointType.EXCSQLSET).get(0).getDrdaDDMParameters().get(DrdaCodePointType.PKGNAMCSN).get(0).getData().toString().split(" ")[0].trim().toUpperCase();
+                        }
+                        else if(drdaPacketList.getDrdaPacketList().containsKey(DrdaCodePointType.PRPSQLSTT)){
+                            this.dbname = drdaPacketList.getDrdaPacketList().get(DrdaCodePointType.PRPSQLSTT).get(0).getDrdaDDMParameters().get(DrdaCodePointType.PKGNAMCSN).get(0).getData().toString().split(" ")[0].trim().toUpperCase();
+                        }
+                    }
+
                     StringBuilder sb = new StringBuilder();
+                    sb.append(this.dbname);
+                    sb.append("|");
                     sb.append("TRANSACTION|");
                     sb.append("START|");
                     sb.append(this.transactionID);
@@ -102,7 +117,8 @@ public class PacketThread implements Runnable {
                         isTransactionStart){
                     this.statingDrdaPacketList = drdaPacketList;
                 }
-                else if(isTransactionStart){
+                else if(isTransactionStart&&
+                        !drdaPacketList.getDrdaPacketList().containsKey(DrdaCodePointType.RDBCMM)&&!drdaPacketList.getDrdaPacketList().containsKey(DrdaCodePointType.RDBRLLBCK)){
                     TcpPacket statingTcpPacket = (TcpPacket)this.statingDrdaPacketList.getParent();
                     Ipv4Packet statingIpv4Packet = (Ipv4Packet) statingTcpPacket.getParent();
                     EthernetPacket statingEthernetPacket = (EthernetPacket)statingIpv4Packet.getParent();
@@ -111,7 +127,8 @@ public class PacketThread implements Runnable {
                     ListMultimap<DrdaCodePointType,DrdaPacket> statingDrdaPacketListMap = this.statingDrdaPacketList.getDrdaPacketList();
                     String SQL="";
                     if(statingDrdaPacketListMap.containsKey(DrdaCodePointType.EXCSQLSET)||
-                    statingDrdaPacketListMap.containsKey(DrdaCodePointType.EXCSQLIMM)){
+                    statingDrdaPacketListMap.containsKey(DrdaCodePointType.EXCSQLIMM)||
+                            statingDrdaPacketListMap.containsKey(DrdaCodePointType.SQLSTT)){
                         if(statingDrdaPacketListMap.containsKey(DrdaCodePointType.SQLSTT)){
                             SQL = statingDrdaPacketListMap.get(DrdaCodePointType.SQLSTT).get(statingDrdaPacketListMap.get(DrdaCodePointType.SQLSTT).size()-1).getDrdaDDMParameters().get(DrdaCodePointType.DATA).get(0).getData().toString();
                         }
@@ -119,6 +136,8 @@ public class PacketThread implements Runnable {
                             ListMultimap<DrdaCodePointType,DrdaPacket> drdaPacketListMap = drdaPacketList.getDrdaPacketList();
                             SQLResult sqlResult =  (SQLResult)drdaPacketListMap.get(DrdaCodePointType.SQLCARD).get(drdaPacketListMap.get(DrdaCodePointType.SQLCARD).size()-1).getDrdaDDMParameters().get(DrdaCodePointType.SQLCARD).get(0).getData();
                             StringBuilder sb = new StringBuilder();
+                            sb.append(this.dbname);
+                            sb.append("|");
                             sb.append("SQL|");
                             sb.append(this.transactionID);
                             sb.append("|");
@@ -155,11 +174,13 @@ public class PacketThread implements Runnable {
                     Packet statingPacket = (Packet)statingEthernetPacket.getParent();
 
                     StringBuilder sb = new StringBuilder();
+                    sb.append(this.dbname);
+                    sb.append("|");
                     sb.append("TRANSACTION|");
                     if(statingDrdaPacketList.getDrdaPacketList().containsKey(DrdaCodePointType.RDBCMM)) {
                         sb.append("COMMIT|");
                     }
-                    else {
+                    else if(statingDrdaPacketList.getDrdaPacketList().containsKey(DrdaCodePointType.RDBRLLBCK)){
                         sb.append("ROLLBACK|");
                     }
                     sb.append(this.transactionID);
@@ -180,7 +201,7 @@ public class PacketThread implements Runnable {
                     this.statingDrdaPacketList = null;
                 }
 
-                logger.debug(drdaPacketList.getDDMListString());
+                //logger.debug(drdaPacketList.getDDMListString());
             }
             //if not drda packet,do nothing
         }
