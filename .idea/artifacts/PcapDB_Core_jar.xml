@@ -1,0 +1,18 @@
+<component name="ArtifactManager">
+  <artifact name="PcapDB.Core:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/PcapDB_Core_jar</output-path>
+    <root id="root">
+      <element id="archive" name="PcapDB.Core.jar">
+        <element id="module-output" name="PcapDB.Core" />
+        <element id="module-output" name="PcapDB.UTest" />
+      </element>
+      <element id="directory" name="lib">
+        <element id="library" level="application" name="Maven: com.google.guava:guava:26.0-jre" />
+        <element id="library" level="application" name="Maven: ch.qos.logback:logback-classic:1.2.3" />
+        <element id="library" level="application" name="Maven: ch.qos.logback:logback-core:1.2.3" />
+        <element id="library" level="application" name="Maven: jnetpcap:jnetpcap:1.4.r1425-1g" />
+        <element id="library" level="application" name="Maven: org.slf4j:slf4j-api:1.7.25" />
+      </element>
+    </root>
+  </artifact>
+</component>
