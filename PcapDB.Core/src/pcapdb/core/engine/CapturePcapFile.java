@@ -42,6 +42,11 @@ public class CapturePcapFile {
         }
     }
 
+    /**
+     * Open Pcap file with specific path
+     * @param path pcap file path
+     * @return JNetPcap object
+     */
     public static Pcap PcapOpenFile(String path){
         StringBuilder errbuf = new StringBuilder();
         Pcap pcap = Pcap.openOffline(path,errbuf);
@@ -60,5 +65,15 @@ public class CapturePcapFile {
             //packetBus.stop();
         }
         return pcap;
+    }
+
+    /**
+     * Close Pcap packet
+     * @param packetBus
+     */
+    public static void PcapClose(Pcap packetBus){
+        if(packetBus!=null){
+            packetBus.close();
+        }
     }
 }
