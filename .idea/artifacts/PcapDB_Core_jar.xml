@@ -4,7 +4,6 @@
     <root id="root">
       <element id="archive" name="PcapDB.Core.jar">
         <element id="module-output" name="PcapDB.Core" />
-        <element id="module-output" name="PcapDB.UTest" />
       </element>
       <element id="directory" name="lib">
         <element id="library" level="application" name="Maven: com.google.guava:guava:26.0-jre" />
@@ -12,6 +11,9 @@
         <element id="library" level="application" name="Maven: ch.qos.logback:logback-core:1.2.3" />
         <element id="library" level="application" name="Maven: jnetpcap:jnetpcap:1.4.r1425-1g" />
         <element id="library" level="application" name="Maven: org.slf4j:slf4j-api:1.7.25" />
+        <element id="directory" name="jnetpcap.native">
+          <element id="dir-copy" path="$PROJECT_DIR$/lib/jnetpcap.native" />
+        </element>
       </element>
     </root>
   </artifact>

@@ -1,5 +1,6 @@
 Manifest-Version: 1.0
-Class-Path: lib/jnetpcap-1.4.r1425-1g.jar lib/guava-26.0-jre.jar lib/logback-core-
- 1.2.3.jar lib/logback-classic-1.2.3.jar lib/slf4j-api-1.7.25.jar
-Main-Class: pcapdb.utest.CapturePcapFileTest
+Class-Path: lib/jnetpcap-1.4.r1425-1g.jar lib/guava-26.0-jre.jar lib/l
+ ogback-core-1.2.3.jar lib/logback-classic-1.2.3.jar lib/slf4j-api-1.7
+ .25.jar
+Main-Class: pcapdb.core.engine.PcapCoreEntry
 
