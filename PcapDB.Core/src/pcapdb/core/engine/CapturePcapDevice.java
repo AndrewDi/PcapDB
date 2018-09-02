@@ -133,7 +133,7 @@ public class CapturePcapDevice {
             return null;
         }
 
-        logger.error("Network devices found:");
+        logger.info("Network devices found:");
 
         int i = 0;  // 遍历所有的设备
         for (PcapIf device : alldevs) {
