@@ -1,9 +1,6 @@
 package pcapdb.core.engine;
 
 import org.jnetpcap.Pcap;
-import org.jnetpcap.PcapDumper;
-import org.jnetpcap.packet.PcapPacket;
-import org.jnetpcap.packet.PcapPacketHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pcapdb.core.buffer.MappedByteBufferLocater;
@@ -18,9 +15,9 @@ import java.nio.channels.FileChannel;
  *
  * @author PanDi(anonymous-oss@outlook.com)
  */
-public class CapturePcapFile {
+public class CapturePcapDevice {
 
-    final static Logger logger = LoggerFactory.getLogger(CapturePcapFile.class.getName());
+    final static Logger logger = LoggerFactory.getLogger(CapturePcapDevice.class.getName());
 
     /**
      * Open file with MappedByteBuffer
