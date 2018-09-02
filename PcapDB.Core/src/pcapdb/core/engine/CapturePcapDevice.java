@@ -80,21 +80,23 @@ public class CapturePcapDevice {
         int flags = Pcap.MODE_PROMISCUOUS;
         int timeout = 10 * 1000;
         Pcap pcap = Pcap.openLive(deviceName,snaplen, flags, timeout, errbuf);
-        // 参数：snaplen指定的是可以捕获的最大的byte数，
-        // 如果 snaplen的值 比 我们捕获的包的大小要小的话，
-        // 那么只有snaplen大小的数据会被捕获并以packet data的形式提供。
-        // IP协议用16位来表示IP的数据包长度，所有最大长度是65535的长度
-        // 这个长度对于大多数的网络是足够捕获全部的数据包的
+        /**
+        参数：snaplen指定的是可以捕获的最大的byte数，
+        如果 snaplen的值 比 我们捕获的包的大小要小的话，
+        那么只有snaplen大小的数据会被捕获并以packet data的形式提供。
+        IP协议用16位来表示IP的数据包长度，所有最大长度是65535的长度
+        这个长度对于大多数的网络是足够捕获全部的数据包的
 
-        // 参数：flags promisc指定了接口是promisc模式的，也就是混杂模式，
-        // 混杂模式是网卡几种工作模式之一，比较于直接模式：
-        // 直接模式只接收mac地址是自己的帧，
-        // 但是混杂模式是让网卡接收所有的，流过网卡的帧，达到了网络信息监视捕捉的目的
+        参数：flags promisc指定了接口是promisc模式的，也就是混杂模式，
+        混杂模式是网卡几种工作模式之一，比较于直接模式：
+        直接模式只接收mac地址是自己的帧，
+        但是混杂模式是让网卡接收所有的，流过网卡的帧，达到了网络信息监视捕捉的目的
 
-        // 参数：timeout 这个参数使得捕获报后等待一定的时间，来捕获更多的数据包，
-        // 然后一次操作读多个包，不过不是所有的平台都支持，不支持的会自动忽略这个参数
+        参数：timeout 这个参数使得捕获报后等待一定的时间，来捕获更多的数据包，
+        然后一次操作读多个包，不过不是所有的平台都支持，不支持的会自动忽略这个参数
 
-        // 参数：errbuf pcap_open_live()失败返回NULL的错误信息，或者成功时候的警告信息
+        参数：errbuf pcap_open_live()失败返回NULL的错误信息，或者成功时候的警告信息
+         */
 
         if(pcap==null){
             logger.error("Error while opening device for capture: {}",errbuf.toString());
